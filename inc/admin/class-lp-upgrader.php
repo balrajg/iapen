@@ -52,7 +52,7 @@ class LP_Upgrader{
     public function unpack_package( $package, $delete_package = true, $name = '' ) {
         global $wp_filesystem;
 
-        $upgrade_folder = $wp_filesystem->wp_content_dir() . 'upgrade/learnpress/';
+        $upgrade_folder = $wp_filesystem->wp_content_dir() . 'upgrade/iapen/';
 
         //Clean up contents of upgrade directory beforehand.
         $upgrade_files = $wp_filesystem->dirlist($upgrade_folder);

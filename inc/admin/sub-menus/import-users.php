@@ -159,11 +159,184 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id)
 			{
 
 			// do create lms-order for this course and user;
-
+			$order_id = ipa_create_order($user_id);
+			ipa_add_item_to_order($order_id, $course->ID);
+			echo "success for " . $user_id;
+			}
+			else{
+				echo $courseName." is not available. please verify once again";
 			}
 		}
 	}
+	
+	
+	/**
+	 * Creates temp new order if needed
+	 *
+	 * @return mixed|WP_Error
+	 * @throws Exception
+	 */
+ function ipa_create_order($user_id) {
+		global $wpdb;
+		// Third-party can be controls to create a order
+			try {
+			// Start transaction if available
+			//$wpdb->query( 'START TRANSACTION' );
 
+			$order_data = array(
+				'status'      => apply_filters( 'learn_press_default_order_status', 'completed' ),
+				'user_id'     => $user_id,
+				'user_note'   => "Created from bulk upload",
+				'created_via' => 'admin',
+				'post_author' => $user_id
+			);
+
+		
+				$order = ipa_create_complete_order( $order_data );
+				if ( is_wp_error( $order ) ) {
+					throw new Exception( sprintf( __( 'Error %d: Unable to create order. Please try again.', 'learnpress' ), 400 ) );
+				} else {
+					$order_id = $order->id;
+				
+				}
+		
+
+			//$wpdb->query( 'COMMIT' );
+
+		} catch ( Exception $e ) {
+			// There was an error adding order data!
+			$wpdb->query( 'ROLLBACK' );
+			echo $e->getMessage();
+			return false; //$e->getMessage();
+		}
+
+
+		return $order_id;
+	}
+	
+	function ipa_create_complete_order( $order_data ) {
+	$order_data_defaults = array(
+		'ID'          => 0,
+		'post_author' => '1',
+		'post_parent' => '0',
+		'post_type'   => LP_ORDER_CPT,
+		'post_status' => 'lp-' . apply_filters( 'learn_press_default_order_status', 'completed' ),
+		'ping_status' => 'closed',
+		'post_title'  => __( 'Order on', 'learnpress' ) . ' ' . current_time( "l jS F Y h:i:s A" )
+	);
+	$order_data          = wp_parse_args( $order_data, $order_data_defaults );
+
+	if ( $order_data['status'] ) {
+		if ( !in_array( 'lp-' . $order_data['status'], array_keys( learn_press_get_order_statuses() ) ) ) {
+			return new WP_Error( 'learn_press_invalid_order_status', __( 'Invalid order status', 'learnpress' ) );
+		}
+		$order_data['post_status'] = 'lp-' . $order_data['status'];
+	}
+
+	
+
+	if ( $order_data['ID'] ) {
+		$order_data = apply_filters( 'learn_press_update_order_data', $order_data );
+		wp_update_post( $order_data );
+		$order_id = $order_data['ID'];
+	} else {
+		$order_data = apply_filters( 'learn_press_new_order_data', $order_data );
+		$order_id   = wp_insert_post( $order_data );
+	}
+
+	if ( $order_id ) {
+		$order = LP_Order::instance( $order_id );
+		update_post_meta( $order_id, '_order_currency', learn_press_get_currency() );
+		update_post_meta( $order_id, '_prices_include_tax', 'no' );
+		update_post_meta( $order_id, '_user_ip_address', learn_press_get_ip() );
+		update_post_meta( $order_id, '_user_agent', isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '' );
+		update_post_meta( $order_id, '_user_id', $order_data[user_id] );
+		update_post_meta( $order_id, '_order_subtotal', 0 );
+		update_post_meta( $order_id, '_order_total', 0 );
+		update_post_meta( $order_id, '_order_key', apply_filters( 'learn_press_generate_order_key', uniqid( 'order' ) ) );
+		update_post_meta( $order_id, '_payment_method', '' );
+		update_post_meta( $order_id, '_payment_method_title', '' );
+		update_post_meta( $order_id, '_order_version', '1.0' );
+		update_post_meta( $order_id, '_created_via', 'bulk-upload' );
+	}
+
+	return LP_Order::instance( $order_id, true );
+}
+
+	
+	/**
+		 * Add new course to order
+		 */
+  function ipa_add_item_to_order($order_id, $item_id) {
+
+			// ensure that user has permission
+			if ( !current_user_can( 'edit_lp_orders' ) ) {
+				die( __( 'Permission denied', 'learnpress' ) );
+			}
+
+
+			// validate order
+			if ( !is_numeric( $order_id ) || get_post_type( $order_id ) != 'lp_order' ) {
+				die( __( 'Order invalid', 'learnpress' ) );
+			}
+
+			// validate item
+		
+			$item_html  = '';
+			$order_data = array();
+				$post = get_post( $item_id );
+				if ( !$post || ( 'lp_course' !== $post->post_type ) ) {
+					echo $item_id. "<br/>";
+				echo  __( 'Course invalid', 'learnpress' ) ;
+				return;
+				}
+				$course = learn_press_get_course( $post->ID );
+				$item   = array(
+					'course_id' => $course->id,
+					'name'      => $course->get_title(),
+					'quantity'  => 1,
+					'subtotal'  => $course->get_price(),
+					'total'     => $course->get_price()
+				);
+
+				// Add item
+				$item_id = learn_press_add_order_item( $order_id, array(
+					'order_item_name' => $item['name']
+				) );
+
+				$item['id'] = $item_id;
+
+				// Add item meta
+				if ( $item_id ) {
+					learn_press_add_order_item_meta( $item_id, '_course_id', $item['course_id'] );
+					learn_press_add_order_item_meta( $item_id, '_quantity', $item['quantity'] );
+					learn_press_add_order_item_meta( $item_id, '_subtotal', $item['subtotal'] );
+					learn_press_add_order_item_meta( $item_id, '_total', $item['total'] );
+
+					
+				}
+
+				$order_data                  = learn_press_update_order_items( $order_id );
+				$currency_symbol             = learn_press_get_currency_symbol( $order_data['currency'] );
+				$order_data['subtotal_html'] = learn_press_format_price( $order_data['subtotal'], $currency_symbol );
+				$order_data['total_html']    = learn_press_format_price( $order_data['total'], $currency_symbol );
+		}
+if (!function_exists('get_post_id_by_meta_key_and_value')) {
+
+ function get_post_id_by_meta_key_and_value($key, $value) {
+	global $wpdb;
+	$meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".$wpdb->escape($key)."' AND meta_value='".$wpdb->escape($value)."'");
+	if (is_array($meta) && !empty($meta) && isset($meta[0])) {
+		$meta = $meta[0];
+		}	
+	if (is_object($meta)) {
+		return $meta->post_id;
+		}
+	else {
+		return false;
+		}
+	}
+}
 function learn_press_page_import_users()
 	{
 	echo $filetype = wp_check_filetype($file) ["ext"];

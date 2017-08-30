@@ -200,7 +200,7 @@ class LP_Assets {
 
 	public static function add_default_scripts( &$scripts ) {
 
-		$default_path = plugins_url( 'learnpress/assets/' );
+		$default_path = plugins_url( 'iapen/assets/' );
 		$suffix       = '';
 		$deps         = array( 'jquery', 'backbone', 'utils' );
 		$ver          = LEARNPRESS_VERSION;
@@ -273,7 +273,7 @@ class LP_Assets {
 	 * @param WP_Styles $styles
 	 */
 	public static function add_default_styles( &$styles ) {
-		$default_path = plugins_url( 'learnpress/assets/' );
+		$default_path = plugins_url( 'iapen/assets/' );
 		$suffix       = '';
 		$deps         = array( 'dashicons' );
 		$ver          = LEARNPRESS_VERSION;

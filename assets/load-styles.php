@@ -9,10 +9,10 @@ error_reporting( 0 );
 
 /** Set ABSPATH for execution */
 if ( !defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', str_replace( LP_WP_CONTENT . '/plugins/learnpress/assets/load-styles.php', '', $_SERVER['SCRIPT_FILENAME'] ) );
+	define( 'ABSPATH', str_replace( LP_WP_CONTENT . '/plugins/iapen/assets/load-styles.php', '', $_SERVER['SCRIPT_FILENAME'] ) );
 }
 define( 'WPINC', 'wp-includes' );
-define( 'LP_PATH', '/' . LP_WP_CONTENT . '/plugins/learnpress/' );
+define( 'LP_PATH', '/' . LP_WP_CONTENT . '/plugins/iapen/' );
 require( ABSPATH . 'wp-admin/includes/noop.php' );
 require( ABSPATH . WPINC . '/script-loader.php' );
 require( ABSPATH . WPINC . '/version.php' );
@@ -63,7 +63,7 @@ foreach ( $load as $handle ) {
 		$path = preg_replace( '~\.min.~', '.', $path );
 	}
 	$content = get_file( $path ) . "\n";
-	if ( strpos( $path, '/learnpress/assets/' ) !== false ) {
+	if ( strpos( $path, '/iapen/assets/' ) !== false ) {
 		$content = str_replace( '../../images/', 'images/', $content );
 		$content = str_replace( '../fonts/', 'fonts/', $content );
 		$out .= $content;
