@@ -1,7 +1,7 @@
 <?php
 $option_headings = array(
 	'answer_text'    => __( 'Answer Text', 'learnpress' ),
-	'answer_correct' => __( 'Is Correct?', 'learnpress' ),
+	'answer_correct' => __( 'Answer Value', 'learnpress' ),
 	'actions'        => '',
 	'sort'           => ''
 );
@@ -69,8 +69,8 @@ $option_headings = apply_filters( 'learn-press/question/multi-choices/admin-opti
 							case 'answer_correct':
 								$classes[] = 'lp-answer-check';
 								?>
-								<input type="hidden" name="learn_press_question[<?php echo $this->id; ?>][answer][value][]" value="<?php echo $value; ?>" />
-								<input type="checkbox" name="learn_press_question[<?php echo $this->id; ?>][checked][]" <?php checked( $answer['is_true'] == 'yes', true ); ?> value="<?php echo $value; ?>" />
+								<input type="text" name="learn_press_question[<?php echo $this->id; ?>][answer][value][]" value="<?php echo $value; ?>" />
+								<input style="display:none" type="checkbox" name="learn_press_question[<?php echo $this->id; ?>][checked][]" <?php checked( true, true ); ?> value="<?php echo $value; ?>" />
 								<?php
 								break;
 							case 'actions':
