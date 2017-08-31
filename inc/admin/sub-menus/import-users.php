@@ -9,7 +9,7 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
-global $user_bulk_upload_results;
+$user_bulk_upload_results = array();
 add_action('init', 'learn_press_upload_user_actions');
 
 if (!function_exists('learn_press_upload_user_actions')) {
@@ -51,9 +51,6 @@ if (!function_exists('learn_press_upload_user_data')) {
             require_once LP_PLUGIN_PATH . "/inc/admin/excel-reader/SpreadsheetReader.php";
         }
 
-        // $StartMem = memory_get_usage();
-
-        $user_bulk_upload_results = [];
         try {
             $Spreadsheet = new SpreadsheetReader($Filepath);
 
@@ -92,12 +89,15 @@ if (!function_exists('learn_press_upload_user_data')) {
             echo $E->getMessage();
         }
     }
+
 }
+
 function learn_press_page_import_create_user($Row, $columnDefinitions) {
     $user_name = $Row[$columnDefinitions["username"]];
     $user_email = $Row[$columnDefinitions["email"]];
     $user_password = $Row[$columnDefinitions["password"]];
     $user_id = username_exists($user_name);
+    global $user_bulk_upload_results;
     if (!$user_id and email_exists($user_email) == false) {
         $user_id = wp_create_user($user_name, $user_password, $user_email);
         if ($user_id) {
@@ -106,43 +106,42 @@ function learn_press_page_import_create_user($Row, $columnDefinitions) {
                 'first_name' => $Row[$columnDefinitions["firstname"]],
                 'last_name' => $Row[$columnDefinitions["lastname"]]
             ));
-           // array_push($user_bulk_upload_results, "user for $user_name is created successfully and id is $user_id");
+            array_push($user_bulk_upload_results, "user for $user_name is created successfully and id is $user_id");
         }
 
         // $result[$user_name] = "created";
     }
-                
+
     return $user_id;
 }
 
 function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
     $courseName = $Row[$columnDefinitions["course1"]];
-    global $wpdb;
+    global $user_bulk_upload_results;
+    $query = new WP_Query;
     if ($courseName != "") {
         $course = get_page_by_title($courseName, "OBJECT", "lp_course");
-     
-        if ($course != null) {
-            echo $order_id = $wpdb->get_var( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_user_id' AND meta_value= $user_id" );
-			
-	$args = array(
-				'meta_key'         => '_user_id',
-				'meta_value'       =>  $user_id,
-				'post_type'        =>  LP_ORDER_CPT,
-				'post_status'      => 'lp-completed'
-			);
-$posts_array = get_posts( $args ); 
-print_r($posts_array);
-exit;
 
-			
-            if($order_id==null|| empty($order_id)){
-               $order_id = ipa_create_order($user_id);
-            }else{
-				add_post_meta($order_id, '_user_id', $user_id);
-			}
+        if ($course != null) {
+
+            $user_orders_Array = $query->query(
+                    array(
+                        'meta_key' => '_user_id',
+                        'meta_value' => $user_id,
+                        'post_status' => 'lp-completed',
+                        'post_type' => LP_ORDER_CPT,
+                        'posts_per_page' => -1,
+                    )
+            );
+            if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
+                $order_id = ipa_create_order($user_id);
+                array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
+            } else {
+
+                add_post_meta($order_id, '_user_id', $user_id);
+            }
             ipa_add_item_to_order($order_id, $course->ID);
-            //array_push($user_bulk_upload_results, "$courseName is added to $user_id");
-           
+            array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
             echo $courseName . " is not available. please verify once again";
         }
@@ -227,7 +226,7 @@ function ipa_create_complete_order($order_data) {
         update_post_meta($order_id, '_user_ip_address', learn_press_get_ip());
         update_post_meta($order_id, '_user_agent', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '' );
         update_post_meta($order_id, '_user_id', $order_data[user_id]);
-       // update_post_meta( $order_id, '_lp_multi_users', 'yes', 'yes' );
+        // update_post_meta( $order_id, '_lp_multi_users', 'yes', 'yes' );
         update_post_meta($order_id, '_order_subtotal', 0);
         update_post_meta($order_id, '_order_total', 0);
         update_post_meta($order_id, '_order_key', apply_filters('learn_press_generate_order_key', uniqid('order')));
@@ -278,7 +277,7 @@ function ipa_add_item_to_order($order_id, $item_id) {
     // Add item
     $item_id = learn_press_add_order_item($order_id, array(
         'order_item_name' => $item['name']
-            ));
+    ));
 
     $item['id'] = $item_id;
 
@@ -296,41 +295,36 @@ function ipa_add_item_to_order($order_id, $item_id) {
     $order_data['total_html'] = learn_press_format_price($order_data['total'], $currency_symbol);
 }
 
-if (!function_exists('get_post_id_by_meta_key_and_value')) {
-
-    function get_post_id_by_meta_key_and_value($key, $value) {
-        global $wpdb;
-        $meta = $wpdb->get_results("SELECT * FROM `" . $wpdb->postmeta . "` WHERE meta_key='" . $wpdb->escape($key) . "' AND meta_value='" . $wpdb->escape($value) . "'");
-        if (is_array($meta) && !empty($meta) && isset($meta[0])) {
-            $meta = $meta[0];
-        }
-        if (is_object($meta)) {
-            return $meta->post_id;
-        } else {
-            return false;
-        }
-    }
-
-}
-
 function learn_press_page_import_users() {
-    
+    global $user_bulk_upload_results;
+    if (!empty($user_bulk_upload_results)) {
+        ?>
+        <h2>Result Status for uploaded file</h2>
+        <ul>
+            <?php
+            foreach ($user_bulk_upload_results as $k => $v) {
+                echo "<li> $v </li>";
+            }
+            ?>
+        </ul>
+        <?php
+    }
     ?>
     <form method="post">
         <pre>
-        <?php
-        if(!(empty($user_bulk_upload_results))){
-            
-            print_r($user_bulk_upload_results);
-        }
-        ?>
+            <?php
+            if (!(empty($user_bulk_upload_results))) {
+
+                print_r($user_bulk_upload_results);
+            }
+            ?>
         </pre>
         <input type="text" name="excel-file-url" id="excel-file-url" readonly="true"/><br/><br/>
         <input id="upload-button" type="button" class="browser button" value="Upload File" />
         <input type="hidden" name="excel-attachment-id" id="excel-attachment-id" />
         <input type="submit" value="Proceed" />
         <input type ="hidden" name="action" value="learn-press-upload-users" />
-    <?php wp_nonce_field('learn-press-upload-user-data', 'learn-press-upload-users-nonce'); ?>
+        <?php wp_nonce_field('learn-press-upload-user-data', 'learn-press-upload-users-nonce'); ?>
     </form>
 
     <script type="text/javascript">
@@ -388,13 +382,13 @@ function learn_press_import_users_page() {
     <div id="learn-press-tools-wrap" class="wrap">
         <h2><?php echo __('Import Users', 'learnpress'); ?></h2>
 
-    <?php
-    if (is_callable('learn_press_page_' . $subtab)) {
-        call_user_func('learn_press_page_' . $subtab, $subtab, $subtabs[$subtab]);
-    } else {
-        do_action('learn_press_page_' . $subtab, $subtab, $subtabs[$subtab]);
-    }
-    ?>
+        <?php
+        if (is_callable('learn_press_page_' . $subtab)) {
+            call_user_func('learn_press_page_' . $subtab, $subtab, $subtabs[$subtab]);
+        } else {
+            do_action('learn_press_page_' . $subtab, $subtab, $subtabs[$subtab]);
+        }
+        ?>
     </div>
     <?php
 }
