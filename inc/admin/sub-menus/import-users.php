@@ -122,13 +122,25 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
         $course = get_page_by_title($courseName, "OBJECT", "lp_course");
      
         if ($course != null) {
-            $order_id = $wpdb->get_var( "SELECT order_id FROM {$wpdb->prefix}learnpress_order_items WHERE order_item_name = '$course->post_title'" );
+            echo $order_id = $wpdb->get_var( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_user_id' AND meta_value= $user_id" );
+			
+	$args = array(
+				'meta_key'         => '_user_id',
+				'meta_value'       =>  $user_id,
+				'post_type'        =>  LP_ORDER_CPT,
+				'post_status'      => 'lp-completed'
+			);
+$posts_array = get_posts( $args ); 
+print_r($posts_array);
+exit;
+
+			
             if($order_id==null|| empty($order_id)){
-                 $order_id = ipa_create_order($user_id);
-                 ipa_add_item_to_order($order_id, $course->ID);
-            }
-            add_post_meta($order_id, '_user_id', $user_id);
-              
+               $order_id = ipa_create_order($user_id);
+            }else{
+				add_post_meta($order_id, '_user_id', $user_id);
+			}
+            ipa_add_item_to_order($order_id, $course->ID);
             //array_push($user_bulk_upload_results, "$courseName is added to $user_id");
            
         } else {
@@ -214,8 +226,8 @@ function ipa_create_complete_order($order_data) {
         update_post_meta($order_id, '_prices_include_tax', 'no');
         update_post_meta($order_id, '_user_ip_address', learn_press_get_ip());
         update_post_meta($order_id, '_user_agent', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '' );
-        //update_post_meta($order_id, '_user_id', $order_data[user_id]);
-        update_post_meta( $order_id, '_lp_multi_users', 'yes', 'yes' );
+        update_post_meta($order_id, '_user_id', $order_data[user_id]);
+       // update_post_meta( $order_id, '_lp_multi_users', 'yes', 'yes' );
         update_post_meta($order_id, '_order_subtotal', 0);
         update_post_meta($order_id, '_order_total', 0);
         update_post_meta($order_id, '_order_key', apply_filters('learn_press_generate_order_key', uniqid('order')));
