@@ -714,6 +714,7 @@
 			LP.Hook.doAction('learn_press_before_start_quiz', this.currentItem, this);
 			var $form = this.$('form.quiz-buttons');
 			var qlenght = this.model.questions.length;
+                        var $questionHtmlContent = "";
 			this.model.questions.forEach(function (m) {
 				var $content = m.get('response');
 				if (!$content) {
@@ -721,10 +722,11 @@
 				}
 				var $question = '';
 				if( qlenght === 1 ) {
-					var $question = jQuery('#'+$content.attr('id')+' .quiz-question-content').clone().hide();
+					var $question = jQuery('#'+$content.attr('id')+' .quiz-question-content').detach().hide();
 				} else {
-					var $question = $content.find('.quiz-question-content').clone().hide();
+					var $question = $content.find('.quiz-question-content').detach().hide();
 				}
+                               
 				$form.append($question);
 			});
 			$form.find('input[name="security"]').val(args.security);

@@ -11,7 +11,7 @@ if ( ! isset( $question ) ) {
 
 if ( ! $question ) {
 }
-$default_answer = array( 'value' => '', 'text' => '', 'is_true' => false );
+$default_answer = array( 'value' => '0', 'text' => '', 'is_true' => false );
 
 if ( isset( $answer ) ) {
 	$answer = wp_parse_args( $answer, $default_answer );

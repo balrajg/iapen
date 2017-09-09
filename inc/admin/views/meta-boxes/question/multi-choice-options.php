@@ -45,12 +45,11 @@ $option_headings = apply_filters( 'learn-press/question/multi-choices/admin-opti
 		-->
 		</thead>
 		<tbody>
-
 		<?php $answers = $this->answers;
 		if ( $answers ): ?>
 			<?php foreach ( $answers as $answer ): ?>
 				<?php
-				$value = $this->_get_option_value( $answer['value'] );
+				 $value = $answer['value'];
 				?>
 
 				<?php do_action( 'learn_press_before_question_answer_option', $this ); ?>

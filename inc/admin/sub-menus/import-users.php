@@ -135,13 +135,10 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
             );
             if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
                 $order_id = ipa_create_order($user_id);
-                array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
-            } else {
-
-                add_post_meta($order_id, '_user_id', $user_id);
+                //array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
             }
             ipa_add_item_to_order($order_id, $course->ID);
-            array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
+           // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
             echo $courseName . " is not available. please verify once again";
         }
@@ -293,6 +290,7 @@ function ipa_add_item_to_order($order_id, $item_id) {
     $currency_symbol = learn_press_get_currency_symbol($order_data['currency']);
     $order_data['subtotal_html'] = learn_press_format_price($order_data['subtotal'], $currency_symbol);
     $order_data['total_html'] = learn_press_format_price($order_data['total'], $currency_symbol);
+    learn_press_auto_enroll_user_to_courses($order_id);
 }
 
 function learn_press_page_import_users() {

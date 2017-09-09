@@ -24,7 +24,7 @@ if ( !is_user_logged_in() ) {
 $history = $user->get_quiz_results( $quiz->id );
 ?>
 <div class="quiz-result lp-group-content-wrap">
-	<h4><?php echo esc_html( sprintf( __( 'You have reached %d of %d points (%s)', 'learnpress' ), $history->mark, $quiz->get_mark(), round( $history->mark_percent ) . '%' ) ); ?></h4>
+	<h4><?php echo esc_html( sprintf( __( 'Total Marks Scored %d ', 'learnpress' ), $history->mark) ); ?></h4>
 	<?php
 	$fields = array(
 		'correct' => sprintf( apply_filters( 'learn_press_quiz_result_correct_text', __( 'Correct %d (%0.0f%%)', 'learnpress' ) ), $history->correct, $history->correct_percent ),
@@ -41,6 +41,7 @@ $history = $user->get_quiz_results( $quiz->id );
 			</div>
 		<?php endforeach; ?>
 	</div>
+     
 	<?php if ( $quiz->duration > 0 ): ?>
 		<p class="quiz-result-time">
 			<?php echo sprintf( __( 'Your time: %s', 'learnpress' ), learn_press_seconds_to_time( $history->time ) ); ?>

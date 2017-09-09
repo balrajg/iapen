@@ -34,6 +34,10 @@ if (typeof window.LP == 'undefined') {
 					},
 					tmpl = wp.template($('#learn-press-question-' + question_id).attr('data-type') + '-option'),
 					$list = $('#learn-press-list-options-' + question_id + ' tbody');
+                                console.log($('#learn-press-question-' + question_id).attr('data-type') + '-option');
+                                if($('#learn-press-question-' + question_id).attr('data-type') == "multi-choice"){
+                                    templateArgs.value=0;   
+                                }
 				$newOption = $(tmpl(templateArgs));
 				if (LP.Hook.applyFilters('before_add_question_option', $newOption, args) !== false) {
 					$list.append($newOption);
