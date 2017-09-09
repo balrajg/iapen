@@ -312,8 +312,11 @@ if ( !class_exists( 'LP_Admin_Ajax' ) ) {
 			if ( !empty( $_GET['exclude'] ) ) {
 				$exclude = array_map( 'intval', $_GET['exclude'] );
 			}
-			$exclude = array_unique( (array) apply_filters( 'learn_press_modal_search_items_exclude', $exclude, $type, $context, $context_id ) );
-			$exclude = array_map( 'intval', $exclude );
+                      
+                          
+			//$exclude = array_unique( (array) apply_filters( 'learn_press_modal_search_items_exclude', $exclude, $type, $context, $context_id ) );
+			//$exclude = array_map( 'intval', $exclude );
+
 			$args    = array(
 				'post_type'      => array( $type ),
 				'posts_per_page' => - 1,
@@ -361,6 +364,7 @@ if ( !class_exists( 'LP_Admin_Ajax' ) ) {
 				$args['s'] = $term;
 			}
 			$args = apply_filters('learn_press_filter_admin_ajax_modal_search_items_args', $args, $context, $context_id  );
+                        
 			$posts       = get_posts( $args );
 			$found_items = array();
 
