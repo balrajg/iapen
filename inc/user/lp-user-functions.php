@@ -152,6 +152,21 @@ function learn_press_add_user_roles() {
 	$admin->add_cap( 'edit_private_' . $order_cap );
 	$admin->add_cap( 'delete_others_' . $order_cap );
 	$admin->add_cap( 'edit_others_' . $order_cap );
+        
+        //Custom User roles
+        
+        _x( 'Trainer', 'User role' );
+	add_role(
+		LP_TRAINER_ROLE,
+		'Trainer',
+		array()
+	);
+        _x( 'ClientSpoc', 'User role' );
+	add_role(
+		LP_CLIENTSPOC_ROLE,
+		'ClientSpoc',
+		array()
+	);
 }
 
 add_action( 'learn_press_ready', 'learn_press_add_user_roles' );
@@ -181,7 +196,11 @@ function learn_press_current_user_is( $check_type = null ) {
 		$user_type = 'instructor';
 	} elseif ( in_array( 'lp_teacher', $user_roles ) ) {
 		$user_type = 'instructor';
-	} elseif ( in_array( 'administrator', $user_roles ) ) {
+	} elseif ( in_array( 'lp_trainer', $user_roles ) ) {
+		$user_type = 'trainer';
+	} elseif ( in_array( 'lp_clientspoc', $user_roles ) ) {
+		$user_type = 'lp_clientspoc';
+	}elseif ( in_array( 'administrator', $user_roles ) ) {
 		$user_type = 'administrator';
 	}
 

@@ -118,6 +118,7 @@ function learn_press_page_import_create_user($Row, $columnDefinitions) {
 function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
     $courseName = $Row[$columnDefinitions["course1"]];
     global $user_bulk_upload_results;
+    global $wpdb;
     $query = new WP_Query;
     if ($courseName != "") {
         $course = get_page_by_title($courseName, "OBJECT", "lp_course");
@@ -136,8 +137,15 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
             if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
                 $order_id = ipa_create_order($user_id);
                 //array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
-            }
-            ipa_add_item_to_order($order_id, $course->ID);
+            }    
+          
+           $orderItemResults= $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->learnpress_order_items WHERE order_item_name = '$courseName' AND order_id  = '$order_id'");
+          if($orderItemResults > 0){
+              // item is already added to order
+          }else{
+              ipa_add_item_to_order($order_id, $course->ID);
+          }
+            
            // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
             echo $courseName . " is not available. please verify once again";

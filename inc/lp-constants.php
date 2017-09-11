@@ -36,6 +36,8 @@ define( 'LP_ORDER_CPT', 'lp_order' );
 
 // Role of user who is a teacher
 define( 'LP_TEACHER_ROLE', 'lp_teacher' );
+define( 'LP_TRAINER_ROLE', 'lp_trainer' );
+define( 'LP_CLIENTSPOC_ROLE', 'lp_clientspoc' );
 
 // Turn debug mode on/off
 define( 'LP_DEBUG', true );
