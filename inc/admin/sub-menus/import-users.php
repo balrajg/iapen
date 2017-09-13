@@ -106,7 +106,7 @@ function learn_press_page_import_create_user($Row, $columnDefinitions) {
                 'first_name' => $Row[$columnDefinitions["firstname"]],
                 'last_name' => $Row[$columnDefinitions["lastname"]]
             ));
-            array_push($user_bulk_upload_results, "user for $user_name is created successfully and id is $user_id");
+            // array_push($user_bulk_upload_results, "user for $user_name is created successfully and id is $user_id");
         }
 
         // $result[$user_name] = "created";
@@ -117,6 +117,7 @@ function learn_press_page_import_create_user($Row, $columnDefinitions) {
 
 function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
     $courseName = $Row[$columnDefinitions["course1"]];
+    $reporting_to_user = $Row[$columnDefinitions["reporting_to_user"]];
     global $user_bulk_upload_results;
     global $wpdb;
     $query = new WP_Query;
@@ -137,16 +138,46 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
             if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
                 $order_id = ipa_create_order($user_id);
                 //array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
-            }    
+            }
+
+            $orderItemResults = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->learnpress_order_items WHERE order_item_name = '$courseName' AND order_id  = '$order_id'");
+            if ($orderItemResults > 0) {
+                // item is already added to order
+            } else {
+                ipa_add_item_to_order($order_id, $course->ID);
+            }
+            $reportint_to_user_id = 0;
+            if ($reporting_to_user != "") {
+                $reportint_to_user_id = username_exists($reporting_to_user);
+            }
+            $rel_table = $wpdb->prefix . 'learnpress_user_relation';
+            $rel_id = $wpdb->get_var("select rel_id from $rel_table WHERE user=$user_id AND course_id = $course->ID");
+            echo $rel_id;
+            $role = $Row[$columnDefinitions["role1"]];
+            $dataargs = array(
+                'rel_id' => $rel_id,
+                'user' => $user_id,
+                'course_id' => $course->ID,
+                'parent' => $reportint_to_user_id,
+                'user_role' => $role
+            );
+            $column_type_args = array(
+                '%d',
+                '%d',
+                '%d',
+                '%s'
+            );
+            if ($rel_id) {
+                $wpdb->update($rel_table, $dataargs, $column_type_args, array('rel_id' => $rel_id));
+            } else {
+                echo "inside insrty";
+                print_r($dataargs);
+                echo $insert_id = $wpdb->insert($rel_table, $dataargs);
+                
+            }
+            echo $wpdb->last_error;
           
-           $orderItemResults= $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->learnpress_order_items WHERE order_item_name = '$courseName' AND order_id  = '$order_id'");
-          if($orderItemResults > 0){
-              // item is already added to order
-          }else{
-              ipa_add_item_to_order($order_id, $course->ID);
-          }
-            
-           // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
+            // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
             echo $courseName . " is not available. please verify once again";
         }
@@ -340,14 +371,14 @@ function learn_press_page_import_users() {
             $('#upload-button').click(function (e) {
                 e.preventDefault();
 
-    // If the uploader object has already been created, reopen the dialog
+                // If the uploader object has already been created, reopen the dialog
 
                 if (mediaUploader) {
                     mediaUploader.open();
                     return;
                 }
 
-    // Extend the wp.media object
+                // Extend the wp.media object
 
                 mediaUploader = wp.media.frames.file_frame = wp.media({
                     title: 'Select File',
@@ -356,7 +387,7 @@ function learn_press_page_import_users() {
                     }, multiple: false});
 
 
-    // When a file is selected, grab the URL and set it as the text field's value
+                // When a file is selected, grab the URL and set it as the text field's value
 
                 mediaUploader.on('select', function () {
                     var attachment = mediaUploader.state().get('selection').first().toJSON();
@@ -364,7 +395,7 @@ function learn_press_page_import_users() {
                     $('#excel-file-url').val(attachment.url);
                 });
 
-    // Open the uploader dialog
+                // Open the uploader dialog
 
                 mediaUploader.open();
             });

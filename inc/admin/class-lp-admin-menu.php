@@ -120,6 +120,14 @@ class LP_Admin_Menu {
 				'manage_options',
 				'learn-press-import-users',
 				'learn_press_import_users_page'
+			),
+                    'manageusers' => array(
+				'learn_press',
+				__( 'Manage Users', 'learnpress' ),
+				__( 'Manage Users', 'learnpress' ),
+				'manage_options',
+				'learn-press-manage-users',
+				'learn_press_manage_users_page'
 			)
 		);
 

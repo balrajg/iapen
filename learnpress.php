@@ -682,3 +682,8 @@ function load_learn_press() {
  * Create new instance of LearnPress and put it to global
  */
 $GLOBALS['LearnPress'] = LP();
+add_action('activated_plugin','my_save_error');
+function my_save_error()
+{
+    file_put_contents(dirname(__file__).'/error_activation.txt', ob_get_contents());
+}

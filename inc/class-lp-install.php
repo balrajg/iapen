@@ -507,9 +507,13 @@ class LP_Install {
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		$schema = self::_get_schema();
+                $result=array();
 		if ( $schema ) {
-			dbDelta( $schema );
+			$result = dbDelta( $schema );
 		}
+                foreach($result as $key => $val){
+                  LP_Debug::instance()->add( $val );  
+                }
 		LP_Debug::instance()->add( 'create_table' );
 	}
 
@@ -648,6 +652,19 @@ class LP_Install {
 					meta_key varchar(45) NOT NULL DEFAULT '',
 					meta_value text NOT NULL,
 					PRIMARY KEY  (meta_id)
+				) $collate;
+				";
+		}
+                $table = $wpdb->prefix . 'learnpress_user_relation';
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) !== $table ) {
+			$query .= "
+				CREATE TABLE {$wpdb->prefix}learnpress_user_relation (
+					rel_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+					course_id bigint(20) unsigned NOT NULL,
+					user bigint(20) unsigned NOT NULL,
+                                        parent bigint(20) unsigned NOT NULL,
+                                        user_role varchar(255) NOT NULL DEFAULT '',
+					PRIMARY KEY  (rel_id)
 				) $collate;
 				";
 		}
