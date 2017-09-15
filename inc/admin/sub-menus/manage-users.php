@@ -361,7 +361,7 @@ function learn_press_manage_users_page() {
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
             //"SELECT relation.rel_id, relation.user_role, user1.user_login as username,  user2.user_login as parent_username, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->users as user1 ON relation.user = user1.ID LEFT JOIN $wpdb->users as user2 ON relation.parent = user2.ID INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE rel_id = %d";
-            $item = $wpdb->get_row($wpdb->prepare("SELECT relation.rel_id, relation.parent as parent_id, relation.course_id, relation.user_role, user1.user_login as username,  user2.user_login as parent_username, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->users as user1 ON relation.user = user1.ID LEFT JOIN $wpdb->users as user2 ON relation.parent = user2.ID INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE rel_id = %d", $rel_id), ARRAY_A);
+            $item = $wpdb->get_row($wpdb->prepare("SELECT relation.rel_id, relation.parent as parent_id, relation.course_id, relation.user_role, relation.user as user_id, user1.user_login as username,  user2.user_login as parent_username, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->users as user1 ON relation.user = user1.ID LEFT JOIN $wpdb->users as user2 ON relation.parent = user2.ID INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE rel_id = %d", $rel_id), ARRAY_A);
             if (!$item) {
                 $item = $default;
                 $notice = __('Invalid request', 'custom_table_example');
@@ -410,9 +410,6 @@ function learn_press_manage_users_page() {
                                 ?>
                                 <label> Course Name :</label> <?php echo $item["coursename"] ?> <br/>
                                 <label> User Name: </label> <?php echo $item["username"] ?> <br/>
-
-
-
                                 <label>   User Role: </label> <select name="user_role" id="user_role">
                                     <option value="student" <?php echo $item["user_role"] == "student" ? "selected" : "" ?>>Learner/Student</option>
                                     <option value="learner-manager" <?php echo $item["user_role"] == "learner-manager" ? "selected" : "" ?>>Learner manager</option>
@@ -433,11 +430,55 @@ function learn_press_manage_users_page() {
                             <?php }
                             ?><br/>
                             <input type="submit" value="<?php _e('Save', 'custom_table_example') ?>" id="submit" class="button-primary" name="submit">
+                            <br/>
+                            <br/>
+
+                            <?php
+                            $current_user_role = $item["user_role"];
+
+                            if ($current_user_role != "" && $current_user_role != "student") {
+                                $all_user = get_all_reportees($item["user_id"], $current_user_role);
+                            }
+                            ?>
+                            <h3>Users Reporting To <?php echo $item["username"] ?></h3>
+                            <?php if(count($all_user)){ ?>
+                            <ul>
+                                <?php
+                                foreach ($all_user as $c_user) {
+                                    echo "<li>$c_user->user as $c_user->user_role </li>";
+                                }
+                                ?>
+                            </ul>
+                            <?php } else { ?>
+                            No users are reporting..
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <?php
+    }
+/**
+	 * Get all reportees to the user id
+	 *
+	 * @param int $user_id mandatory
+         * @param string $user_role optional  
+	 *
+	 * @return array  Array of object of relation table
+	 */
+    function get_all_reportees($user_id, $user_role, $user_array = array()) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'learnpress_user_relation';
+
+        $children = $wpdb->get_results("SELECT * FROM $table_name WHERE parent = $user_id");
+        foreach ($children as $child) {
+            array_push($user_array, $child);
+            if ($child->user_role != "student") {
+                $user_array = get_all_reportees($child->user, $child->user_role, $user_array);
+            }
+        }
+
+        return $user_array;
     }
     
