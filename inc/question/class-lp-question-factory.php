@@ -327,7 +327,8 @@ class LP_Question_Factory {
 		$types = array(
 			'true_or_false' => __( 'True Or False', 'learnpress' ),
 			'multi_choice'  => __( 'Multi Choice', 'learnpress' ),
-			'single_choice' => __( 'Single Choice', 'learnpress' )
+			'single_choice' => __( 'Single Choice', 'learnpress' ),
+                        'essay' => __( 'Essay', 'learnpress' )
 		);
 		return apply_filters( 'learn_press_question_types', $types );
 	}

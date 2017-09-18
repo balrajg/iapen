@@ -35,7 +35,7 @@ if ( $is_hidden ) {
 		<div class="item-bulk-actions">
 			<input name="_lp_curriculum[__SECTION__][description]" class="lp-section-describe" type="text" value="<?php echo esc_attr( $section->section_description ); ?>" placeholder="<?php _e( 'Describe about this section', 'learnpress' ); ?>" />
 			<button class="button hide-if-js" type="button" data-action="delete" data-title="<?php _e( 'Remove', 'learnpress' ); ?>" data-confirm-remove="<?php _e( 'Are you sure you want to remove these items from section?', 'learnpress' ); ?>"><?php _e( 'Remove', 'learnpress' ); ?></button>
-            <span class="button lp-check-items">
+                        <span class="button lp-check-items">
 				<input class="lp-check-all-items" data-action="check-all" type="checkbox" />
 			</span>
 		</div>
@@ -62,6 +62,8 @@ if ( $is_hidden ) {
 
 			</div>
 		<?php endif; ?>
+                        <br/>
+                       Topic Start date : <input type="text" name="_lp_curriculum[__SECTION__][section_start_date]"  value="<?php echo esc_attr( $section->section_start_date ); ?>"/> Days
 		<?php do_action( 'learn_press_after_section_content', $section ); ?>
 	</div>
 </li>

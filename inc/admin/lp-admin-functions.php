@@ -2405,7 +2405,8 @@ function learn_press_get_default_section($section = null)
                  'section_name' => '',
                  'section_course_id' => null,
                  'section_order' => null,
-                 'section_description' => ''
+                 'section_description' => '',
+                 'section_start_date' => null
              ) as $k => $v) {
         if (!property_exists($section, $k)) {
             $section->{$k} = $v;

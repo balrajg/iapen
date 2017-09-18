@@ -98,17 +98,19 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 			$category_base = $settings->get( 'course_category_base' );
 			register_taxonomy( 'course_category', array( LP_COURSE_CPT ),
 				array(
-					'label'             => __( 'Course Categories', 'learnpress' ),
+					'label'             => __( 'Programs', 'learnpress' ),
 					'labels'            => array(
-						'name'          => __( 'Course Categories', 'learnpress' ),
-						'menu_name'     => __( 'Category', 'learnpress' ),
-						'singular_name' => __( 'Category', 'learnpress' ),
-						'add_new_item'  => __( 'Add New Course Category', 'learnpress' ),
-						'all_items'     => __( 'All Categories', 'learnpress' )
+						'name'          => __( 'Programs', 'learnpress' ),
+						'menu_name'     => __( 'Program', 'learnpress' ),
+						'singular_name' => __( 'Program', 'learnpress' ),
+						'add_new_item'  => __( 'Add New Program', 'learnpress' ),
+						'all_items'     => __( 'All Programs', 'learnpress' ),
+						'edit_item'     => __( 'Edit Program', 'learnpress' ),
+						'view_item'     => __( 'View Programs', 'learnpress' )
 					),
 					'query_var'         => true,
 					'public'            => true,
-					'hierarchical'      => true,
+					'hierarchical'      => false,
 					'show_ui'           => true,
 					'show_in_menu'      => 'learn_press',
 					'show_admin_column' => true,
@@ -874,13 +876,14 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 					'section_name'        => '',
 					'section_course_id'   => 0,
 					'section_order'       => 0,
-					'section_description' => ''
+					'section_description' => '',
+                                    'section_start_date' => 0
 				)
 			);
 			$section = stripslashes_deep( $section );
 			extract( $section );
 
-			$insert_data = compact( 'section_name', 'section_course_id', 'section_order', 'section_description' );
+			$insert_data = compact( 'section_name', 'section_course_id', 'section_order', 'section_description','section_start_date' );
 			$wpdb->insert(
 				$wpdb->learnpress_sections,
 				$insert_data,
@@ -1032,6 +1035,7 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 							'section_course_id'   => $post->ID,
 							'section_order'       => ++ $section_order,
 							'section_description' => $_section['description'],
+							'section_start_date' => $_section['section_start_date'],
 							'items'               => array()
 						);
 
@@ -1310,7 +1314,7 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 				$columns['price']    = __( 'Price', 'learnpress' );
 			}
 
-			$columns['taxonomy-course_category'] = __( 'Categories', 'learnpress' );
+			$columns['taxonomy-course_category'] = __( 'Programs', 'learnpress' );
 
 			global $wp_query;
 			if ( $wp_query->is_main_query() ) {

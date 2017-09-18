@@ -611,6 +611,7 @@ class LP_Install {
 					section_course_id bigint(20) unsigned NOT NULL DEFAULT '0',
 					section_order bigint(5) unsigned NOT NULL DEFAULT '0',
 					section_description longtext NOT NULL,
+                                        start_date bigint(20) NOT NULL DEFAULT '0'
 					PRIMARY KEY  (section_id)
 				) $collate;";
 		}

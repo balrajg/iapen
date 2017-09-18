@@ -865,7 +865,7 @@ function learn_press_admin_course_tabs() {
 
 			20 => array(
 				"link" => "edit-tags.php?taxonomy=course_category&post_type=lp_course",
-				"name" => __( "Categories", "learnpress" ),
+				"name" => __( "Programs", "learnpress" ),
 				"id"   => "edit-course_category",
 			),
 			30 => array(

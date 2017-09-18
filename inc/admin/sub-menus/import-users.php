@@ -111,6 +111,9 @@ function learn_press_page_import_create_user($Row, $columnDefinitions) {
 
         // $result[$user_name] = "created";
     }
+    $role = $Row[$columnDefinitions["role1"]];
+    if($role != "student")
+        wp_update_user( array( 'ID' => $user_id, 'role' => "lp_teacher" ) );
 
     return $user_id;
 }
@@ -126,19 +129,29 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
 
         if ($course != null) {
 
-            $user_orders_Array = $query->query(
-                    array(
-                        'meta_key' => '_user_id',
-                        'meta_value' => $user_id,
-                        'post_status' => 'lp-completed',
-                        'post_type' => LP_ORDER_CPT,
-                        'posts_per_page' => -1,
-                    )
-            );
-            if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
+            /*  $user_orders_Array = $query->query(
+              array(
+              'meta_key' => '_user_id',
+              'meta_value' => $user_id,
+              'post_status' => 'lp-completed',
+              'post_type' => LP_ORDER_CPT,
+              'posts_per_page' => -1,
+              )
+              );
+              if (empty($user_orders_Array) || empty($order_id = $user_orders_Array[0]->ID)) {
+              // $order_id = ipa_create_order($user_id);
+              //array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
+              } */
+
+            $order_id = $wpdb->get_var("SELECT ot.order_id FROM {$wpdb->prefix}learnpress_order_items as ot INNER JOIN $wpdb->posts as posts on ot.order_id = posts.ID WHERE posts.post_status='lp-completed' and posts.post_type = '".LP_ORDER_CPT."' and ot.order_item_name = '$course->post_title'");
+
+            if ($order_id == null || empty($order_id)) {
                 $order_id = ipa_create_order($user_id);
-                //array_push($user_bulk_upload_results, "order ($order_id) created for $user_id");
+                ipa_add_item_to_order($order_id, $course->ID);
             }
+            $role = $Row[$columnDefinitions["role1"]];
+            if($role == "student")
+            add_post_meta($order_id, '_user_id', $user_id);
 
             $orderItemResults = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->learnpress_order_items WHERE order_item_name = '$courseName' AND order_id  = '$order_id'");
             if ($orderItemResults > 0) {
@@ -146,14 +159,15 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
             } else {
                 ipa_add_item_to_order($order_id, $course->ID);
             }
+
+            learn_press_auto_enroll_user_to_courses($order_id);
             $reportint_to_user_id = 0;
             if ($reporting_to_user != "") {
                 $reportint_to_user_id = username_exists($reporting_to_user);
             }
             $rel_table = $wpdb->prefix . 'learnpress_user_relation';
             $rel_id = $wpdb->get_var("select rel_id from $rel_table WHERE user=$user_id AND course_id = $course->ID");
-            echo $rel_id;
-            $role = $Row[$columnDefinitions["role1"]];
+            
             $dataargs = array(
                 'rel_id' => $rel_id,
                 'user' => $user_id,
@@ -168,15 +182,13 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
                 '%s'
             );
             if ($rel_id) {
-                $wpdb->update($rel_table, $dataargs, $column_type_args, array('rel_id' => $rel_id));
+                $wpdb->update($rel_table, $dataargs, array('rel_id' => $rel_id));
             } else {
-                echo "inside insrty";
-                print_r($dataargs);
-                echo $insert_id = $wpdb->insert($rel_table, $dataargs);
-                
+                $insert_id = $wpdb->insert($rel_table, $dataargs);
             }
+
+            echo $wpdb->last_query;
             echo $wpdb->last_error;
-          
             // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
             echo $courseName . " is not available. please verify once again";
@@ -261,8 +273,8 @@ function ipa_create_complete_order($order_data) {
         update_post_meta($order_id, '_prices_include_tax', 'no');
         update_post_meta($order_id, '_user_ip_address', learn_press_get_ip());
         update_post_meta($order_id, '_user_agent', isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '' );
-        update_post_meta($order_id, '_user_id', $order_data[user_id]);
-        // update_post_meta( $order_id, '_lp_multi_users', 'yes', 'yes' );
+        //  update_post_meta($order_id, '_user_id', $order_data[user_id]);
+        update_post_meta($order_id, '_lp_multi_users', 'yes', 'yes');
         update_post_meta($order_id, '_order_subtotal', 0);
         update_post_meta($order_id, '_order_total', 0);
         update_post_meta($order_id, '_order_key', apply_filters('learn_press_generate_order_key', uniqid('order')));
@@ -329,7 +341,6 @@ function ipa_add_item_to_order($order_id, $item_id) {
     $currency_symbol = learn_press_get_currency_symbol($order_data['currency']);
     $order_data['subtotal_html'] = learn_press_format_price($order_data['subtotal'], $currency_symbol);
     $order_data['total_html'] = learn_press_format_price($order_data['total'], $currency_symbol);
-    learn_press_auto_enroll_user_to_courses($order_id);
 }
 
 function learn_press_page_import_users() {
