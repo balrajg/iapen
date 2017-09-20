@@ -62,6 +62,11 @@ class LP_Cache {
 	 * @var string
 	 */
 	protected static $_user_finished_courses = 'user-finished-courses';
+        	/**
+	 * @var string
+	 */
+	protected static $_user_uploaded_document_courses = 'user-uploaded-document-courses';
+
 
 	/**
 	 * @var string
@@ -380,6 +385,32 @@ class LP_Cache {
 	 */
 	public static function get_finished_courses( $key = false, $def = false ) {
 		return self::_get_cache( self::$_user_finished_courses, $key, $def );
+	}
+
+        /**
+	 * Set cache for user's course information
+	 *
+	 * @param      $key_or_value
+	 * @param bool $value
+	 *
+	 * @return array|bool|mixed
+	 */
+	public static function set_uploaded_document_courses( $key_or_value, $value = false ) {
+		if ( func_num_args() == 1 ) {
+			wp_cache_set( self::$_user_uploaded_document_courses, $key_or_value, self::$_group );
+			return $key_or_value;
+		}
+		return self::_set_cache( self::$_user_uploaded_document_courses, $key_or_value, $value );
+	}
+
+	/**
+	 * @param bool $key
+	 * @param bool $def
+	 *
+	 * @return array|bool|mixed
+	 */
+	public static function get_uploaded_document_courses( $key = false, $def = false ) {
+		return self::_get_cache( self::$_user_uploaded_document_courses, $key, $def );
 	}
 
 	/**

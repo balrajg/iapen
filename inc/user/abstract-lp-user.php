@@ -1579,6 +1579,55 @@ class LP_Abstract_User {
 		return apply_filters( 'learn_press_user_has_finished_course', $finished_courses[ $course_id ] == 'yes', $course_id, $this->id );
 	}
 
+        
+        /**
+	 * Return true if you has uploaded_document a course
+	 *
+	 * @param int
+	 * @param bool
+	 *
+	 * @return bool
+	 */
+	public function has_uploaded_document_course( $course_id, $force = false ) {
+		$item_statuses = LP_Cache::get_item_statuses( false, array() );
+		$key           = sprintf( '%d-%d-%d', $this->id, $course_id, $course_id );
+		$finished      = 'no';
+		if ( ! empty( $item_statuses ) && array_key_exists( $key, $item_statuses ) && ! $force ) {
+			$finished = ( $item_statuses[ $key ] == 'uploaded' ) ? 'yes' : 'no';
+		} else {
+			global $wpdb;
+			$query                 = $wpdb->prepare( "SELECT status FROM {$wpdb->prefix}learnpress_user_items where user_id=%d and item_id=%d", $this->id, $course_id );
+			$finished              = $wpdb->get_var( $query ) == 'uploaded' ? 'yes' : 'no';
+			$item_statuses[ $key ] = $finished;
+			LP_Cache::set_item_statuses( $key, $finished );
+		}
+
+		return apply_filters( 'learn_press_user_has_uploaded_document_course', $finished == 'yes', $this, $course_id );
+
+		//static $courses = array();
+		$finished_courses = LP_Cache::get_uploaded_document_courses( false, array() );
+		if ( empty( $finished_courses[ $course_id ] ) || $force ) {
+			global $wpdb;
+			$query                          = $wpdb->prepare( "
+				SELECT status
+				FROM {$wpdb->prefix}learnpress_user_items uc
+				INNER JOIN {$wpdb->posts} c ON c.ID = uc.item_id
+				INNER JOIN {$wpdb->posts} o ON o.ID = uc.ref_id
+				INNER JOIN {$wpdb->postmeta} om ON om.post_id = o.ID AND om.meta_key = %s AND om.meta_value = %d
+				WHERE uc.user_id = %d
+				AND uc.item_id = %d
+				AND o.post_status = %s
+				ORDER BY user_item_id DESC LIMIT 0,1
+			", '_user_id', $this->id, $this->id, $course_id, 'lp-completed' );
+			$finished_courses[ $course_id ] = $wpdb->get_var( $query ) == 'uploaded' ? 'yes' : 'no';
+			LP_Cache::set_uploaded_document_courses( $finished_courses );
+		}
+
+		return apply_filters( 'learn_press_user_has_finished_course', $finished_courses[ $course_id ] == 'yes', $course_id, $this->id );
+	}
+
+        
+        
 	public function has_passed_course( $course_id ) {
 		$course = LP_Course::get_course( $course_id );
 		if ( $course ) {

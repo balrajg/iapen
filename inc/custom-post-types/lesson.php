@@ -141,7 +141,7 @@ if ( !class_exists( 'LP_Lesson_Post_Type' ) ) {
 							'id'           => "{$prefix}duration",
 							'type'         => 'number',
 							'type'         => 'duration',//'number',
-							'default_time' => 'minute',
+							'default_time' => 'day',
 							'desc'         => __( 'Duration of the lesson. Set 0 to disable', 'learnpress' ),
 							'std'          => 30,
 						),
@@ -150,6 +150,13 @@ if ( !class_exists( 'LP_Lesson_Post_Type' ) ) {
 							'id'      => "{$prefix}preview",
 							'type'    => 'yes_no',
 							'desc'    => __( 'If this is a preview lesson, then student can view this lesson content without taking the course', 'learnpress' ),
+							'std' => 'no'
+						),
+						array(
+							'name'    => __( 'uploading document required to complete', 'learnpress' ),
+							'id'      => "{$prefix}requires_document_upload",
+							'type'    => 'yes_no',
+							'desc'    => __( 'User need to upload data to complete the lesson', 'learnpress' ),
 							'std' => 'no'
 						)
 					)
