@@ -1960,6 +1960,90 @@ class LP_Abstract_User {
 		return $result;
 	}
 
+        /**
+	 *upload document to the lesson for user
+	 *
+	 * @param     $lesson_id
+	 * @param int $course_id
+         * @param string filepath
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function upload_document_to_lesson( $lesson_id, $course_id = 0 , $filepath = "") {
+		global $wpdb;
+		do_action( 'learn_press_before_user_upload_document_lesson', $lesson_id, $this );
+		$course_id = $this->_get_course_id( $course_id );
+
+		if ( $this->can_view_lesson( $lesson_id, $course_id ) == 'preview' ) {
+			return false;
+		}
+		$result = false;
+
+		/**
+		 * If user has stared a lesson, get user lesson information
+		 */
+		if ( $item = $this->is_exists_lesson( $lesson_id, $course_id ) ) {
+
+			// Update lesson status if it's not 'completed'
+			if ( $item->status !== 'uploaded' ) {
+				$updated = $wpdb->update(
+					$wpdb->prefix . 'learnpress_user_items',
+					array(
+						'end_time' => current_time( 'mysql' ),
+						'status'   => 'uploaded'
+					),
+					array(
+						'user_item_id' => $item->user_item_id
+					),
+					array( '%s', '%s' ),
+					array( '%d' )
+				);
+				if ( ! $updated ) {
+					$result = new WP_Error( 'lesson-document-uploaded', $wpdb->last_error );
+				}
+			} else {
+				$result = new WP_Error( 'lesson-document-uploaded', __( 'You have already uploaded your document for this lesson', 'learnpress' ) );
+			}
+		} else {
+			$wpdb->insert(
+				$wpdb->prefix . 'learnpress_user_items',
+				array(
+					'user_id'    => $this->id,
+					'item_id'    => $lesson_id,
+					'item_type'  => LP_LESSON_CPT,
+					'ref_id'     => $course_id,
+					'ref_type'   => LP_COURSE_CPT,
+					'start_time' => current_time( 'mysql' ),
+					'end_time'   => current_time( 'mysql' ),
+					'status'     => 'uploaded',
+					'parent_id'  => learn_press_get_user_item_id( $this->id, $course_id )
+				),
+				array( '%d', '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%d' )
+			);
+			$updated = $wpdb->insert_id;
+			if ( ! $updated ) {
+				$result = new WP_Error( 'lesson-document-uploaded', $wpdb->last_error );
+			}
+		}
+		if($filepath != ""){
+                    $wpdb->insert(
+				$wpdb->prefix . 'learnpress_user_itemmeta',
+				array(					
+			             'learnpress_user_item_id'  => learn_press_get_user_item_id( $this->id, $course_id ),
+                                    'meta_key'     => 'uploaded_file_path',
+                                    'meta_value'   => $filepath
+				),
+				array( '%d', '%s', '%s' )
+			);
+			$updated = $wpdb->insert_id;
+                }
+
+		do_action( 'learn_press_user_complete_lesson', $lesson_id, $result, $this->id );
+
+		return $result;
+	}
+
+        
 	/**
 	 * Returns TRUE if user has already completed a lesson
 	 *

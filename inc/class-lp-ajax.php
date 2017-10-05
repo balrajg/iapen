@@ -411,6 +411,40 @@ if ( ! class_exists( 'LP_AJAX' ) ) {
 			wp_redirect( learn_press_get_current_url() );
 			die();
 		}
+                
+                /**
+		 * Request upload document to  an item
+		 */
+		public static function _request_upload_item () {
+			$user      = learn_press_get_current_user();
+			$id        = learn_press_get_request( 'id' );
+			$course_id = ! empty( $_REQUEST['course_id'] ) ? $_REQUEST['course_id'] : get_the_ID();
+			$type      = learn_press_get_request( 'type' );
+			$security  = learn_press_get_request( 'security' );
+			$response  = array();
+			if ( ! wp_verify_nonce( $security, sprintf( 'complete-item-%d-%d-%d', $user->id, $course_id, $id ) ) ) {
+				$response['result']  = 'fail';
+				$response['message'] = __( 'Bad request!', 'learnpress' );
+			} else {
+				if ( $type == 'lp_lesson' ) {
+					$results = $user->upload_document_to_lesson( $id, $course_id );
+
+					if ( is_wp_error( $results ) ) {
+						learn_press_add_message( __( 'Error while completing lesson.', 'learnpress' ) );
+					} elseif ( $results !== false ) {
+
+						$message   = __( 'You have uploaded document to lesson', 'learnpress' );
+						learn_press_add_message( $message );
+
+					}
+
+				} else {
+					do_action( 'learn_press_user_request_complete_item', $_REQUEST );
+				}
+			}
+			wp_redirect( learn_press_get_current_url() );
+			die();
+		}
 
 		/**
 		 * Request load item content
