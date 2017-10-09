@@ -30,7 +30,6 @@ $curriculum_heading = apply_filters( 'learn_press_curriculum_heading', __( 'Cour
 		<ul class="curriculum-sections">
 
 			<?php foreach ( $curriculum as $section ) : ?>
-
 				<?php learn_press_get_template( 'single-course/loop-section.php', array( 'section' => $section ) ); ?>
 
 			<?php endforeach; ?>

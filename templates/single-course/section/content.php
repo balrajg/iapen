@@ -13,10 +13,11 @@ $learnpress_course_sections = learn_press_get_course_sections();
 ?>
 
 <ul class="section-content">
-
 	<?php if ( !empty( $section->items ) ) { ?>
 
 	<?php
+        $previous_item = null;
+        
 	foreach ( $section->items as $item ) {
 		$post_type = str_replace( 'lp_', '', $item->post_type );
 
@@ -24,9 +25,11 @@ $learnpress_course_sections = learn_press_get_course_sections();
 
 		$args = array(
 			'item'    => $item,
-			'section' => $section
+			'section' => $section,
+                        'previous_item' => $previous_item,
 		);
 		learn_press_get_template( "single-course/section/item-{$post_type}.php", $args );
+                $previous_item = $item;
 	}
 	?>
 	<?php } else { ?>

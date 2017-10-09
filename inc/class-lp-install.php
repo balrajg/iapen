@@ -669,6 +669,19 @@ class LP_Install {
 				) $collate;
 				";
 		}
+                $table = $wpdb->prefix . 'learnpress_user_itemuploads';
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) !== $table ) {
+			$query .= "
+				CREATE TABLE {$wpdb->prefix}learnpress_user_itemuploads (
+					upload_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+					learnpress_user_item_id bigint(20) unsigned NOT NULL,
+                                        status varchar(255) NOT NULL DEFAULT '',
+					date_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+					media_path text NOT NULL,
+					PRIMARY KEY  (upload_id)
+				) $collate;
+				";
+		}
 		return $query;
 	}
 }

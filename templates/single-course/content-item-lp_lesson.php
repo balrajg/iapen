@@ -14,7 +14,8 @@ $can_view_item = $user->can('view-item', $item->id, $course->id);
 
 $block_option = get_post_meta($course->id, '_lp_block_lesson_content', true);
 $duration = $course->get_user_duration_html($user->id, true);
- $document_upload_needed = get_post_meta($course->id, '_lp_requires_document_upload', true);
+
+ $document_upload_needed = get_post_meta($item->id, '_lp_requires_document_upload', true);
 if (!$duration && ( isset($block_option) && $block_option == 'yes' )) {
     learn_press_get_template('content-lesson/block-content.php');
 } else {
@@ -59,17 +60,20 @@ if (!$duration && ( isset($block_option) && $block_option == 'yes' )) {
             }
             ?>
         <?php
-        } else if (!$user->has('has-uploaded-document-course', $course->id)) {
+       } 
+        else if ($document_upload_needed && $user->has('uploaded-document-to-course', $course->id, $item->id)) {
             ?>
             <h3>Your document is in process. You will get notification once it is approved</h3>
             <button class="" disabled="disabled"> <?php _e('Awaiting Approval', 'learnpress'); ?></button>
 
         <?php
+        
         } else if (!$user->has('finished-course', $course->id) && !in_array($can_view_item, array(
                     'preview',
                     'no-required-enroll'
                 )) && !$document_upload_needed
         ) {
+           
             ?>
 
             <form method="post" name="learn-press-form-complete-lesson" class="learn-press-form">
@@ -81,8 +85,8 @@ if (!$duration && ( isset($block_option) && $block_option == 'yes' )) {
                 <button class="button-complete-item button-complete-lesson"><?php echo __('Complete', 'learnpress'); ?></button>
 
             </form>
-    <?php }else if($document_upload_needed && !$user->has('has-uploaded-document-course', $course->id)){ ?>
-             <form method="post" name="learn-press-form-upload-document-lesson" class="learn-press-form">
+    <?php }else if($document_upload_needed && !$user->has('uploaded-document-to-course', $course->id, $item->id)){ ?>
+        <form method="post" name="learn-press-form-upload-document-lesson" enctype="multipart/form-data" class="learn-press-form">
                 <input type="hidden" name="id" value="<?php echo $item->id; ?>"/>
                 <input type="hidden" name="course_id" value="<?php echo $course->id; ?>"/>
                 <input type="hidden" name="security" value="<?php echo esc_attr($security); ?>"/>

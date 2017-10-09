@@ -11,10 +11,18 @@ if ( !defined( 'ABSPATH' ) ) {
 $user        = learn_press_get_current_user();
 $course      = LP()->global['course'];
 $viewable    = learn_press_user_can_view_quiz( $item->ID, $course->id );//learn_press_is_enrolled_course();
+$previous_item= $args['previous_item'];
+$p_item_status = $user->get_item_status( $previous_item->ID );
+if (in_array( $p_item_status, array( 'completed' ) ) ) {
+    $viewable = true;
+}else{
+    $viewable = false;
+}
+
 $tag         = $viewable ? 'a' : 'span';
 $target      = apply_filters( 'learn_press_section_item_link_target', '_blank', $item );
 $item_title  = apply_filters( 'learn_press_section_item_title', get_the_title( $item->ID ), $item );
-$item_link   = $viewable ? 'href="' . $course->get_item_link( $item->ID ) . '"' : '';
+$item_link   = $viewable ? 'href="' . $course->get_item_link( $item->ID ) . '"' : 'href="#"';
 $item_status = $user->get_item_status( $item->ID );
 $result      = $user->get_quiz_results( $item->ID );
 $has_result  = false;
