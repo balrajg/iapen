@@ -127,12 +127,11 @@ class upload_List_Table extends WP_List_Table {
 
     function column_file_status($item) {
 
-        $actions = array(
-            'action' => sprintf('<a class="change_action" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], 'delete', __('Delete', 'custom_table_example')),
-        );
+        
         if ($item['file_status'] == "uploaded") {
             $actions = array(
                 'action' => sprintf('<a  class="change_action" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], 'approved', __('Approve', 'custom_table_example')),
+                'delete' => sprintf('<a class="change_action" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], 'delete', __('Delete', 'custom_table_example')),
             );
         }
 

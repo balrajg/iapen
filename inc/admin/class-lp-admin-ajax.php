@@ -1224,6 +1224,7 @@ if (!class_exists('LP_Admin_Ajax')) {
                 if ($lesson_detail['item_type'] == 'lp_lesson') {
                     $results = $user->complete_lesson($lesson_detail['lesson_id'], $lesson_detail['course_id']);
                 }
+                //course_id, lesson_id, user_id, 
                 //send mail to user that he has completed the lesson
             } else if ($newStatus == 'delete') {
                 $updated = $wpdb->delete($upload_table_name, array('upload_id' => $upload_id));
