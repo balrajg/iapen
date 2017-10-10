@@ -14,7 +14,6 @@ $tag      = $viewable ? 'a' : 'span';
 $target   = apply_filters( 'learn_press_section_item_link_target', '_blank', $item );
 $item_title = apply_filters( 'learn_press_section_item_title', get_the_title( $item->ID ), $item );
 $item_link = $viewable ? 'href="' . $course->get_item_link( $item->ID ) . '"' : '';
-print_r($args['previous_item'] );
 ?>
 <li <?php learn_press_course_item_class( $item->ID ); ?> data-type="<?php echo $item->post_type; ?>">
 	<?php do_action( 'learn_press_before_section_item_title', $item, $section, $course ); ?>

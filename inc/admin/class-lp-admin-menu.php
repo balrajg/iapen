@@ -128,6 +128,14 @@ class LP_Admin_Menu {
 				'manage_options',
 				'learn-press-manage-users',
 				'learn_press_manage_users_page'
+			),
+                    'uploads' => array(
+				'learn_press',
+				__( 'user uploads', 'learnpress' ),
+				__( 'user uploads', 'learnpress' ),
+				'manage_options',
+				'learn-press-uploads',
+				'learn_press_uploads_page'
 			)
 		);
 

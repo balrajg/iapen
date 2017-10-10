@@ -1918,10 +1918,10 @@ $result = true;
         /**
          * If user has stared a lesson, get user lesson information
          */
-        $wpdb->insert(
+ $updated=       $wpdb->insert(
                 $wpdb->prefix . 'learnpress_user_itemuploads', array(
             'learnpress_user_item_id' => learn_press_get_user_item_id($this->id, $lesson_id),
-            'media_id' => 0,
+            'status' => 'uploaded',
             'media_path' => $file['url'],
             'date_time' => current_time('mysql')
                 )
@@ -1931,9 +1931,9 @@ $result = true;
             $result = new WP_Error('lesson-document-uploaded', $wpdb->last_error);
         }
      
-       // $attachments = array($file['file']);
-      //$headers = 'From: My Name <myname@mydomain.com>' . "\r\n";
-     // wp_mail('balu.sgb@gmail.com', 'user has uploade', 'document uploaded message. extra details needed to be added', $headers, $attachments);
+       $attachments = array($file['file']);
+      $headers = 'From:IPA LMS  <balu.sgb@gmail.com>' . "\r\n";
+     wp_mail('balu.sgb@gmail.com', 'user has uploade', 'document uploaded message. extra details needed to be added', $headers, $attachments);
 
         do_action('learn_press_user_complete_lesson', $lesson_id, $result, $this->id);
 
