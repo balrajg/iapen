@@ -10,9 +10,9 @@
 
 defined( 'ABSPATH' ) || exit();
 
-if ( !class_exists( 'LP_Email_User_Order_Completed' ) ) {
+if ( !class_exists( 'LP_Email_User_File_Uploaded' ) ) {
 
-	class LP_Email_User_Order_Completed extends LP_Email {
+	class LP_Email_User_File_Uploaded extends LP_Email {
 		/**
 		 * LP_Email_User_Order_Completed constructor.
 		 */
@@ -130,4 +130,4 @@ if ( !class_exists( 'LP_Email_User_Order_Completed' ) ) {
 	}
 }
 
-return new LP_Email_User_Order_Completed();
+return new LP_Email_User_File_Uploaded();
