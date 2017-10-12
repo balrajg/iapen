@@ -187,7 +187,7 @@ function ipa_create_order_for_user($Row, $columnDefinitions, $user_id) {
                 $insert_id = $wpdb->insert($rel_table, $dataargs);
             }
 
-            echo $wpdb->last_query;
+            //$wpdb->last_query;
             echo $wpdb->last_error;
             // array_push($user_bulk_upload_results, "$courseName is added to $user_id for order ($order_id)");
         } else {
