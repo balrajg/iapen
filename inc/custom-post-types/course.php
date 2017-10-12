@@ -527,10 +527,10 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 						'std'  => '10 weeks'
 					),
 					array(
-						'name' => __( 'Maximum students', 'learnpress' ),
-						'id'   => "{$prefix}max_students",
-						'type' => 'number',
-						'desc' => __( 'Maximum number of students who can enroll in this course.', 'learnpress' ),
+						'name' => __( 'Start Date', 'learnpress' ),
+						'id'   => "{$prefix}start_date",
+						'type' => 'date',
+						'desc' => __( 'start date of course.', 'learnpress' ),
 						'std'  => 1000,
 					),
 					array(
