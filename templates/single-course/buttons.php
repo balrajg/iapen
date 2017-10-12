@@ -74,7 +74,7 @@ $course = LP()->global['course'];
 					<?php esc_html_e( 'Finish course', 'learnpress' ); ?>
 				</button>
 			<?php elseif ( $user->can( 'enroll-course', $course->id ) === true ) : ?>
-				<form name="enroll-course" class="enroll-course" method="post" enctype="multipart/form-data">
+				<?php /* <form name="enroll-course" class="enroll-course" method="post" enctype="multipart/form-data">
 					<?php do_action( 'learn_press_before_enroll_button' ); ?>
 
 					<input type="hidden" name="lp-ajax" value="enroll-course" />
@@ -83,8 +83,11 @@ $course = LP()->global['course'];
 
 					<?php do_action( 'learn_press_after_enroll_button' ); ?>
 				</form>
+                                 * 
+                                 */
+                                ?>
 			<?php elseif ( $user->can( 'purchase-course', $course->id ) ) : ?>
-
+<?php /*
 				<form name="purchase-course" class="purchase-course" method="post" enctype="multipart/form-data">
 					<?php do_action( 'learn_press_before_purchase_button' ); ?>
 					<button class="button purchase-button" data-block-content="yes">
@@ -94,27 +97,8 @@ $course = LP()->global['course'];
 					<input type="hidden" name="purchase-course" value="<?php echo $course->id; ?>" />
 					<input type="hidden" value="user can purchase course" />
 				</form>
-
-			<?php elseif ( $user->can( 'enroll-course', $course->id ) === 'enough' ) : ?>
-				<p class="learn-press-message"><?php echo $notice_enough_student; ?></p>
-			<?php else: ?>
-				<?php $order_status = $user->get_order_status( $course->id ); ?>
-				<?php if ( in_array( $order_status, array( 'lp-pending', 'lp-refunded', 'lp-cancelled', 'lp-failed' ) ) ) { ?>
-					<form name="purchase-course" class="purchase-course" method="post" enctype="multipart/form-data">
-						<?php do_action( 'learn_press_before_purchase_button' ); ?>
-						<button class="button purchase-button" data-block-content="yes">
-							<?php echo $course->is_free() ? $enroll_button_text : $purchase_button_text; ?>
-						</button>
-						<?php do_action( 'learn_press_after_purchase_button' ); ?>
-						<input type="hidden" name="purchase-course" value="<?php echo $course->id; ?>" />
-						<input type="hidden" value="user order cancelled" />
-
-					</form>
-				<?php } elseif ( in_array( $order_status, array( 'lp-processing', 'lp-on-hold' ) ) ) { ?>
-					<?php learn_press_display_message( '<p>' . apply_filters( 'learn_press_user_course_pending_message', __( 'Your order is processing. Please wait for approval.', 'learnpress' ), $course, $user ) . '</p>' ); ?>
-				<?php } elseif ( $order_status && $order_status != 'lp-completed' ) { ?>
-					<?php learn_press_display_message( '<p>' . apply_filters( 'learn_press_user_can_not_purchase_course_message', __( 'Sorry, you can not purchase this course', 'learnpress' ), $course, $user ) . '</p>' ); ?>
-				<?php } ?>
+*/ ?>
+			
 			<?php endif;
 		}
 	endif;

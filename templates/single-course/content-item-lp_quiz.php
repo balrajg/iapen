@@ -25,7 +25,13 @@ if ($current_item->item_order > 1) {
     }
 }
 
+ $can_view_section = $user->can('view-section');
+ if(!$can_view_section){
+    
 
+    echo "<h2>Cant view item, Not yet started</h2>";
+    return;
+}
 
 if (!$quiz) {
     return;

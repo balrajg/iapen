@@ -16,6 +16,14 @@ $block_option = get_post_meta($course->id, '_lp_block_lesson_content', true);
 $duration = $course->get_user_duration_html($user->id, true);
 
  $document_upload_needed = get_post_meta($item->id, '_lp_requires_document_upload', true);
+ $can_view_section = $user->can('view-section');
+ if(!$can_view_section){
+    
+
+    echo "<h2>Cant view item, Not yet started</h2>";
+   return;
+}
+
 if (!$duration && ( isset($block_option) && $block_option == 'yes' )) {
     learn_press_get_template('content-lesson/block-content.php');
 } else {
