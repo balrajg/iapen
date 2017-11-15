@@ -1,0 +1,22 @@
+Hello,
+
+The following survey has been completed:
+
+{SURVEY_NAME}
+{SURVEY_URL}
+
+Completed by:
+
+{NAME}
+{EMAIL}
+
+If this survey has since expired or you have elected for visitors not to view surveys, you`ll need to log into your administration area to view it:
+{URL}
+
+You can switch off this notification in your admin area.
+
+
+-------------------------
+
+{WEBSITE_NAME}
+{WEBSITE_URL}

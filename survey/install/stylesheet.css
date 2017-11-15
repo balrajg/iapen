@@ -1,0 +1,77 @@
+
+/*---------------------------------------------
+  MAIAN SURVEY v1.1
+  Written by David Ian Bennett
+  E-Mail: N/A
+  Website: www.maiansurvey.com
+----------------------------------------------*/
+
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	margin: 10px 0;
+	background: #EBF6FD;
+	font:normal 15px/18px Arial, Helvetica, sans-serif;
+	color:#444;
+}
+a {
+	color: #444;
+}
+a:hover {
+	text-decoration: none;
+}
+.mainTable {
+  border: 2px solid #223344;
+  margin-top: 50px;
+  background-color: #FFFFFF;
+}
+.headCell {
+  border-bottom: 1px solid #223344;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #FFFFFF;
+  background:#0271AB url(header.jpg) repeat-y;
+}
+.pad {
+  padding: 5px;
+}
+.areaTable {
+  border: 1px dashed #223344;
+}
+td {
+  text-align: left;
+}
+.info {
+  color: #444;
+}
+.error_info {
+  display: block;
+  padding: 5px;
+  color: #FF0000;
+}
+form {
+  padding: 0;
+  margin: 0;
+}
+.formButton {
+  color: #000;
+  background:#d6e5e8;
+  border: 1px solid #223344;
+  padding:5px;
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -ms-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin-top:10px;
+}
+p.button {
+  text-align: center;
+  padding: 10px 0 10px 0;
+}

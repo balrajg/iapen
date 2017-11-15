@@ -1,0 +1,164 @@
+/* Progress Bar - Multiple Pages */
+#progressBarDivWrapper {
+  width:250px;
+  margin:2px auto;
+}
+#progressBarDiv {
+  width:200px;
+  border:1px solid #223344;
+  text-align:left;
+}
+.progressBarCell {
+  background:#ABBECA url(templates/images/progress.jpg);
+}
+.progressBarCellHidden {
+}
+
+/* General */
+#progress {
+  margin-top:5px;
+}
+
+/* Error and Thanks Divs */
+#error_table {
+  font-family:verdana,arial,sans-serif;
+  padding: 20px;
+  border:1px dashed #ff0000;
+  color:#ff0000;
+  font-size:16px;
+  font-weight: bold;
+}
+#thanks_table {
+  font-family:verdana,arial,sans-serif;
+  padding: 20px;
+  border:1px dashed #ABBECA;
+}
+.t_head {
+  color:#000;
+  font-size:16px;
+  font-weight: bold;
+  padding-bottom:10px;
+}
+.t_msg {
+  font-size:12px;
+}
+.t_results a {
+  color:#000;
+  font-size:12px;
+  padding-top:10px;
+}
+
+/* Form elements */
+input,textarea,select {
+  font-family:verdana,arial,sans-serif;
+  font-size:12px;
+  color:#000;
+}
+.box {
+  width:75%;
+  padding:3px;
+}
+textarea {
+  width:75%;
+  padding:3px;
+}
+.question label {
+  display:block;
+  margin:3px 0 3px 0;
+  font-weight: bold;
+}
+
+/* For Help ToolTip */
+#JT_close_left, #JT_close_right {
+	font-size: 1.1em;
+}
+#JT_copy p, #JT_copy ul {
+	font-size: 1.1em;
+}
+#contentPad {
+	margin: 20px;
+}
+.formInfo a, .formInfo a:active, formInfo a:visited {
+	background-color: #FF0000;
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 1px 2px;
+	margin-left: 5px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.formInfo a:hover {
+	color: #660000;
+	text-decoration: none;
+}
+hr {
+  margin:10px 0;
+  color:#999999;
+}
+#JT_arrow_left {
+	background-image: url(templates/images/arrow_left.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+	position: absolute;
+	z-index: 101;
+	left: -12px;
+	height: 23px;
+	width: 10px;
+	top: -3px;
+}
+#JT_arrow_right {
+	background-image: url(templates/images/arrow_right.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+	position: absolute;
+	z-index: 101;
+	height: 23px;
+	width: 11px;
+	top: -2px;
+}
+#JT {
+	position: absolute;
+	z-index: 100;
+	border: 2px solid #CCCCCC;
+	background-color: #fff;
+	font: 12px verdana, Arial, Helvetica, sans-serif;
+  color:#333333;
+  text-align:left;
+}
+#JT_copy {
+	padding: 10px 10px 10px 10px;
+	color: #333333;
+}
+.JT_loader {
+	background-image: url(templates/images/loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 100%;
+	height: 12px;
+}
+#JT_close_left {
+	background-color: #CCCCCC;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight: bold;
+}
+#JT_close_right {
+	background-color: #CCCCCC;
+	text-align: left;
+	padding-left: 8px;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	font-weight: bold;
+}
+#JT_copy p {
+	margin: 3px 0;
+}
+#JT_copy img {
+	padding: 1px;
+	border: 1px solid #CCCCCC;
+}
+.jTip {
+	cursor: help;
+}

@@ -1,0 +1,438 @@
+/*---------------------------------------------
+  MAIAN SURVEY v1.1
+  Written by David Ian Bennett
+  E-Mail: N/A
+  Website: www.maiansurvey.com
+----------------------------------------------*/
+
+html {
+	min-height: 100%;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+a {
+	color: #963;
+}
+a:hover {
+	color: #C60;
+	text-decoration:none;
+}
+img {
+  border:0;
+}
+form {
+  padding:0;
+  margin:0;
+}
+body {
+	background: #CCD8E0;
+	color: #444;
+	font: normal 62.5% Tahoma, sans-serif;
+}
+p, code, ul {
+	padding-bottom: 1.2em;
+}
+li {
+	list-style: none;
+}
+h1 {
+	font: normal 1.8em Tahoma, sans-serif;
+	margin-bottom: 4px;
+}
+code {
+	background: #FFF;
+	border: 1px solid #EEE;
+	border-left: 3px solid #C1CAD3;
+	color: #666;
+	display: block;
+	font: normal 1em Tahoma, sans-serif;
+	line-height: 1.6em;
+	margin-bottom: 12px;
+	padding: 8px 10px;
+}
+code a {
+  color:#666;
+}
+code a:hover {
+  color:#C60;
+  text-decoration:none; 
+}
+.table {
+	background: #FFF;
+	border: 1px solid #EEE;
+	border-left: 3px solid #C1CAD3;
+	color: #666;
+	font: normal 1em Tahoma, sans-serif;
+	line-height: 1.6em;
+	margin-bottom: 3px;
+}
+blockquote {
+	background: url(templates/img/quote.gif) no-repeat;
+	display: block;
+	font-weight: bold;
+	padding-left: 28px;
+}
+h1, h2, h3 {
+	padding-top: 6px;
+}
+/* misc */
+.clearer {
+	clear: both;
+}
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.informationBox {
+  display:block;
+  width:95%;
+  text-align:center;
+  background:#fff;
+  padding:5px;
+  border:1px solid #EAEADA;
+}
+.surround {
+  padding:5px;
+  border:1px solid #eaeada;
+  background:#fff;
+  color:#223344;
+  font-weight:bold;
+  text-decoration:underline;
+}
+/* structure */
+#wrapper {
+	margin: 2px auto;
+	margin-top:20px;
+	border: 1px solid #223344;
+	width: 1000px;
+	background: #fff;
+	padding: 2px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+ -khtml-border-radius: 5px 5px 5px 5px;
+ -ms-border-radius: 5px 5px 5px 5px;
+ border-radius: 5px 5px 5px 5px;
+}
+.container {
+	font-size: 1.2em;
+	width: 100%;
+	background:#fafafa;
+}
+/* header */
+.header {
+	background: #FFF;
+	margin: 0 auto;
+	width: 1000px;
+}
+.header p {
+  background: #B3C2C7 url(templates/img/header.jpg);
+	 font: normal 20px Verdana, sans-serif;
+	 text-transform:uppercase;
+	 text-align: left;
+	 color:#223344;
+	 text-shadow:#fff 1px 1px;
+	 padding:15px;
+	 -webkit-border-radius: 5px 5px 0 0;
+ -khtml-border-radius: 5px 5px 0 0;
+ -ms-border-radius: 5px 5px 0 0;
+ border-radius: 5px 5px 0 0;
+}
+/* navigation */
+.navigation {
+	background: #D9E1E5 url(templates/img/nav.gif);
+	border: 1px solid #DFEEF7;
+	border-color: #DFEEF7 #CFDEE7;
+	height: 41px;
+}
+.navigation a {
+	background: #D9E1E5 url(templates/img/nav.gif);
+	border-right: 1px solid #AFBEC7;
+	color: #456;
+	display: block;
+	float: left;
+	font: bold 1.1em sans-serif;
+	line-height: 41px;
+	padding: 0 20px;
+	text-decoration: none;
+}
+.navigation a:hover {
+	background-position: left bottom;
+	color: #234;
+}
+/* main */
+.main {
+	border-top: 4px solid #FFF;
+	min-height: 350px;
+}
+/* sub navigation */
+.sidenav {
+	float: right;
+	width: 241px;
+	background:#f7f7f2;
+}
+.sidenav h2 {
+	color: #5A5A43;
+	font-size: 1em;
+	line-height: 30px;
+	margin: 0;
+	padding-left: 12px;
+}
+.sidenav ul {
+	padding: 0;
+	border-top: 1px solid #EAEADA;
+}
+.sidenav li {
+	border-bottom: 1px solid #EAEADA;
+}
+.sidenav li a {
+	font-size: 1.1em;
+	color: #554;
+	display: block;
+	padding: 8px 0 8px 5%;
+	text-decoration: none;
+	width: 95%;
+}
+.sidenav li a:hover {
+	background: #F0F0EB;
+	color: #654;
+}
+/* content */
+.content {
+	float: left;
+	margin: 10px 0;
+	padding: 0 16px;
+	width: 710px;
+}
+.content .descr {
+	color: #664;
+	font-size: 0.9em;
+	margin-bottom: 6px;
+}
+.content li {
+	list-style: url(templates/img/li.gif);
+	margin-left: 18px;
+}
+.content p {
+	font: normal 11px Verdana, sans-serif;
+}
+/* form */
+input,select,textarea {
+  font: normal 12px Verdana, sans-serif;
+} 
+label {
+  display:block;
+  margin:0 0 10px 0;
+  background: url(templates/img/label.gif) no-repeat left center;
+  padding-left: 15px;
+}
+label.first {
+}
+.box {
+  padding:3px;
+  border:1px solid #444;
+  background:#fff;
+  border-left:2px solid #444;
+  width:75%;
+}
+textarea {
+  padding:3px;
+  border:1px solid #444;
+  background:#fff;
+  border-left:2px solid #444;
+  width:85%;
+  height:100px;
+}
+.button {
+  background:#CCD8E0 url(templates/img/nav.gif);
+  height:30px;
+  color:#444;
+  font-weight:bold;
+  border:1px solid #AABDC9;
+}
+.error {
+  display: block;
+  color:#ff0000;
+  background: url(templates/img/error.gif) no-repeat left center;
+  padding-left:15px;
+  margin-top:3px;
+  font-size:11px;
+}
+select {
+  border:1px solid #444;
+  padding:3px;
+  background:#fff;
+}
+.formOptionWrap {
+  padding: 2px 5px 5px 2px;
+  background:#F7F7F2;
+  border:1px solid #EAEADA;
+  margin-bottom:5px;
+}
+
+/* footer */
+.footer {
+	background: url(templates/img/bgfooter.gif) repeat-x;
+	color: #FFF;
+	font: bold 1em sans-serif;
+	line-height: 39px;
+	padding: 0 12px;
+	text-align: center;
+	-webkit-border-radius: 0 0 5px 5px;
+ -khtml-border-radius: 0 0 5px 5px;
+ -ms-border-radius: 0 0 5px 5px;
+ border-radius: 0 0 5px 5px;
+}
+.footer a, .footer a:hover {
+	color: #FFF;
+}
+td {
+  text-align: left;
+}
+/* Keywords */
+.keyHead {
+  text-align:left;
+  padding:5px;
+  border-bottom:2px solid #abbeca;
+}
+.keyWrap {
+  padding: 2px 5px 5px 2px;
+  background:#F7F7F2;
+  border:1px solid #EAEADA;
+  margin-top:3px;
+}
+
+/* Other */
+.color_option {
+  display:block;
+  font-size: 11px;
+  color: #5A5A43;
+  margin: 5px 0 2px 0;
+  font-weight: bold;
+}
+.img_option {
+  border:0;
+  padding: 5px;
+  border:1px solid #EEEEEE;
+  background:#F7F7F2;
+  vertical-align:bottom;
+}
+/*----------page numbers----------------*/
+#pages { 
+  text-align: center;
+  padding-top: 10px;
+  margin-top:15px;
+  border-top:1px dashed #EEEEEE;
+}
+.cur_page_no {
+}
+#page a {
+  color:#5A5A43;
+}
+/* Print Screen/View keywords */
+#print_screen,.print_screen {
+  border: 1px solid #AFBEC7;
+  padding:10px;
+  background:#fff;
+  font-size:12px;
+}
+.print_screen {
+  margin-bottom:2px;
+  padding-left:5px;
+}
+#print_top {
+  clear:both;
+  border: 1px solid #AFBEC7;
+  background:#fff;
+  font-size:12px;
+  margin-bottom:5px;
+}
+#print_top p {
+  text-align:left;
+  padding:10px;
+  font-size:14px;
+  font-weight: bold;
+  color: #444;
+}
+p.search_question {
+  font-weight: bold;
+  padding:5px;
+  display:block;
+  text-transform:uppercase;
+  background: url(templates/img/label.gif) no-repeat left center;
+  padding-left: 15px;
+}
+p.search_answer {
+  font-weight: normal;
+  padding:5px;
+  line-height:15px;
+  display:block;
+  color:#666;
+}
+.search_pages {
+  text-align: center;
+  font-size:12px;
+}
+.search_pages a {
+  font-size:12px;
+  padding:0;
+}
+.highlight {
+  background:#ccd8e0;
+}
+
+/* iBox */
+#ibox_wrapper {
+  line-height:20px;
+  border:10px solid #b3c2c7;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -ms-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+#ibox_wrapper, #ibox_footer_wrapper a { 
+  background-color:#fff; 
+}
+
+#ibox_content { 
+  background-color:#fff; 
+  border:0; 
+  margin: 10px 10px 40px 10px; 
+}
+
+#ibox_footer_wrapper {
+  line-height: 20px;
+  bottom: 5px;
+  top: auto;
+}
+
+#ibox_footer_wrapper a {
+  text-indent: -100000px;
+  border:0;
+  background: #fff url(templates/img/lightbox/closelabel.gif) center center no-repeat;
+  width: 66px;
+  padding: 0;
+  height: 22px;
+  line-height: 20px;
+}
+
+#ibox_footer_wrapper a:hover { 
+  background-color:#fff; 
+}
+
+#ibox_loading {
+  text-indent: -100000px;
+  width: 100px;
+  border:2px solid #b3c2c7;
+  height: 100px;
+  background: #fff url(templates/img/lightbox/loading.gif) center center no-repeat;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -khtml-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -ms-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}

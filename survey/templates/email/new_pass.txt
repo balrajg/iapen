@@ -1,0 +1,18 @@
+Hi {NAME},
+
+You are receiving this e-mail because you have reset your password in your survey system.
+
+Your new password is:
+
+{PASS}
+
+Please log in to your account immediately and change this to something you can remember. 
+{URL}
+
+You should also delete this e-mail for security reasons.
+
+
+-------------------------
+
+{WEBSITE_NAME}
+{WEBSITE_URL}
