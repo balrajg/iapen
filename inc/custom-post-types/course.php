@@ -877,7 +877,7 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 					'section_course_id'   => 0,
 					'section_order'       => 0,
 					'section_description' => '',
-                                    'section_start_date' => 0
+                                    'section_start_date' => ''
 				)
 			);
 			$section = stripslashes_deep( $section );
@@ -890,6 +890,7 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 				array( '%s', '%d', '%d' )
 			);
 			$section['section_id'] = $wpdb->insert_id;
+                       
 
 			return $section;
 		}
