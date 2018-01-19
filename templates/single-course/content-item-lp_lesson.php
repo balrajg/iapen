@@ -16,6 +16,7 @@ $block_option = get_post_meta($course->id, '_lp_block_lesson_content', true);
 $duration = $course->get_user_duration_html($user->id, true);
 
  $document_upload_needed = get_post_meta($item->id, '_lp_requires_document_upload', true);
+ $document_upload_needed = $document_upload_needed =="yes"?true:false;
  $can_view_section = $user->can('view-section');
  if(!$can_view_section){
     
