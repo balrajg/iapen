@@ -40,7 +40,7 @@ if (!class_exists('LP_AJAX')) {
                     add_action('wp_ajax_nopriv_learnpress_' . $ajax_event, array(__CLASS__, $ajax_func));
                 }
             }
-            
+
             LP_Request_Handler::register('lp-ajax', array(__CLASS__, 'do_ajax'));
         }
 
@@ -412,19 +412,19 @@ if (!class_exists('LP_AJAX')) {
          * Request upload document to  an item
          */
         public static function _request_upload_item() {
-           if(!function_exists('wp_handle_upload')){
-             require_once(ABSPATH . 'wp-admin/includes/file.php');
+            if (!function_exists('wp_handle_upload')) {
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
             }
-   
-$upload_overrides = array('test_form' => false);
+
+            $upload_overrides = array('test_form' => false);
 
             $user = learn_press_get_current_user();
             $id = learn_press_get_request('id');
 
 
 
-             $uploaded_media = wp_handle_upload($_FILES["response_document"], $upload_overrides);
-        
+            $uploaded_media = wp_handle_upload($_FILES["response_document"], $upload_overrides);
+
             $course_id = !empty($_REQUEST['course_id']) ? $_REQUEST['course_id'] : get_the_ID();
             $type = learn_press_get_request('type');
             $security = learn_press_get_request('security');
@@ -505,6 +505,30 @@ $upload_overrides = array('test_form' => false);
                 learn_press_get_template('singe-course/content-protected.php');
             }
             die();
+        }
+
+        public static function _request_get_all_students_for_course() {
+            $user = learn_press_get_current_user_id();
+            $course_id = learn_press_get_request('select_course');
+            $result = self::get_all_students_for_course($user, $course_id);
+            echo json_encode($result);
+            die();
+        }
+
+        public static function get_all_students_for_course($user_id, $course_id, $user_array = array()) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'learnpress_user_relation';
+
+            $children = $wpdb->get_results("SELECT * FROM $table_name WHERE parent = $user_id AND course_id= $course_id");
+            foreach ($children as $child) {
+
+                if ($child->user_role == "student") {
+                    array_push($user_array, $child);
+                } else {
+                    $user_array = self::get_all_students_for_course($child->user, $course_id, $user_array);
+                }
+            }
+            return $user_array;
         }
 
         /**

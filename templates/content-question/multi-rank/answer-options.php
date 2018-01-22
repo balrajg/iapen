@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for displaying the content of multi-choice question
+ * Template for displaying the content of multi-rank question
  *
  * @author  ThimPress
  * @package LearnPress/Templates
@@ -58,7 +58,7 @@ if ( $show_result && $completed ) {
 				<?php do_action( 'learn_press_before_question_answer_text', $answer, $this ); ?>
 
 				<label>
-					<input type="checkbox" name="learn-press-question-<?php echo $this->id; ?>[]" <?php checked( $this->is_selected_option( $answer, $answered ) ); ?> value="<?php echo $answer['value']; ?>" <?php echo $disabled; ?> />
+                                    <input type="text" style="float: left; width: 40px;" maxlength="1" name="learn-press-question-<?php echo $this->id; ?>[]" <?php checked( $this->is_selected_option( $answer, $answered ) ); ?> value="0" <?php echo $disabled; ?> />
 					<p class="auto-check-lines option-title"><?php echo apply_filters( 'learn_press_question_answer_text', $answer['text'], $answer, $this ); ?></p>
 				</label>
 

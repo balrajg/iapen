@@ -164,6 +164,7 @@ class LP_Question_Factory {
 		add_action( 'delete_post', array( __CLASS__, 'delete_question' ), 10, 2 );
 
 		LP_Question_Factory::add_template( 'multi-choice-option', LP_Question_Multi_Choice::admin_js_template() );
+                LP_Question_Factory::add_template( 'multi-rank-option', LP_Question_Multi_Rank::admin_js_template() );
 		LP_Question_Factory::add_template( 'single-choice-option', LP_Question_Single_Choice::admin_js_template() );
 
 		do_action( 'learn_press_question_factory_init', __CLASS__ );
@@ -265,6 +266,25 @@ class LP_Question_Factory {
 		return $answers;
 	}
 
+        protected static function _sanitize_multi_rank_answers( $answers, $q ) {
+		$size = sizeof( $answers );
+		if ( $size == 0 ) {
+			$answers = $q->get_default_answers();
+		}
+		$answers     = array_values( $answers );
+		$has_checked = false;
+		foreach ( $answers as $k => $answer ) {
+			if ( empty( $answer['answer_data']['is_true'] ) || $answer['answer_data']['is_true'] != 'yes' ) {
+				$answers[$k]['answer_data']['is_true'] = 'no';
+				continue;
+			}
+			$has_checked = true;
+		}
+		if ( !$has_checked ) {
+			$answers[0]['answer_data']['is_true'] = 'yes';
+		}
+		return $answers;
+	}
 	protected static function _sanitize_true_or_false_answers( $answers, $q ) {
 		$size = sizeof( $answers );
 		if ( $size > 2 ) {
@@ -328,6 +348,7 @@ class LP_Question_Factory {
 			'true_or_false' => __( 'True Or False', 'learnpress' ),
 			'multi_choice'  => __( 'Multi Choice', 'learnpress' ),
 			'single_choice' => __( 'Single Choice', 'learnpress' ),
+                        'multi_rank' => __( 'Rank', 'learnpress' ),
                         'essay' => __( 'Essay', 'learnpress' )
 		);
 		return apply_filters( 'learn_press_question_types', $types );

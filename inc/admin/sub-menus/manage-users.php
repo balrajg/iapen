@@ -360,7 +360,6 @@ function learn_press_manage_users_page() {
 
             // if this is not post back we load item to edit or give new one to create
             $item = $default;
-            //"SELECT relation.rel_id, relation.user_role, user1.user_login as username,  user2.user_login as parent_username, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->users as user1 ON relation.user = user1.ID LEFT JOIN $wpdb->users as user2 ON relation.parent = user2.ID INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE rel_id = %d";
             $item = $wpdb->get_row($wpdb->prepare("SELECT relation.rel_id, relation.parent as parent_id, relation.course_id, relation.user_role, relation.user as user_id, user1.user_login as username,  user2.user_login as parent_username, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->users as user1 ON relation.user = user1.ID LEFT JOIN $wpdb->users as user2 ON relation.parent = user2.ID INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE rel_id = %d", $rel_id), ARRAY_A);
             if (!$item) {
                 $item = $default;

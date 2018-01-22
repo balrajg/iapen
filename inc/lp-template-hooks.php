@@ -10,6 +10,7 @@ add_filter( 'learn_press_course_tabs', '_learn_press_default_course_tabs', 5 );
 add_filter( 'body_class', 'learn_press_body_class' );
 add_filter( 'post_class', 'learn_press_course_class', 15, 3 );
 
+
 /* wrapper */
 add_action( 'learn_press_before_main_content', 'learn_press_wrapper_start' );
 add_action( 'learn_press_after_main_content', 'learn_press_wrapper_end' );

@@ -558,7 +558,7 @@ class LP_Upgrade_From_09 {
 				add_post_meta( $new_id, '_lp_type', $meta['type'] );
 			}
 			if ( !empty( $meta['answer'] ) ) {
-				if ( in_array( $meta['type'], array( 'true_or_false', 'single_choice', 'multi_choice', 'sorting_choice' ) ) ) {
+				if ( in_array( $meta['type'], array( 'true_or_false', 'single_choice', 'multi_choice', 'multi_rank', 'sorting_choice' ) ) ) {
 					$ordering = 0;
 					foreach ( $meta['answer'] as $order => $answer ) {
 						$question_data = array(

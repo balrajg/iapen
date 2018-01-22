@@ -130,7 +130,7 @@ class upload_List_Table extends WP_List_Table {
         
         if ($item['file_status'] == "uploaded") {
             $actions = array(
-                'action' => sprintf('<a  class="change_action" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], 'approved', __('Approve', 'custom_table_example')),
+                'action' => sprintf('<a  class="change_action" id="change_action_%s" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], $item['upload_id'], 'approved', __('Approve', 'custom_table_example')),
                 'delete' => sprintf('<a class="change_action" data-upload-id ="%s" data-new-action = "%s"  href="#">%s</a>', $item['upload_id'], 'delete', __('Delete', 'custom_table_example')),
             );
         }
@@ -331,11 +331,15 @@ function learn_press_uploads_page() {
                                 // $content.addClass('loading');
                             },
                             success: function (response) {
-                              //  $input.prop('disabled', false);
-                              //  $content.removeClass('loading');
-                               // $content.html(response);
-                                //wp-list-table
-                                console.log(response);
+                              response = $.parseJSON(response);
+                             if(response.status=="success"){
+                                  if( data.newAction == "approved" ){
+                                      $("#change_action_"+response.uploadId).closest("td").html("approved");
+                                    }
+                                      if( data.newAction == "delete" ){
+                                      $("#change_action_"+response.uploadId).closest("tr").remove();
+                                    }
+                                }
                             }
                         });
                     })

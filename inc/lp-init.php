@@ -44,7 +44,7 @@ function learn_press_setup_pages() {
 	global $wpdb;
 	static $pages = false;
 	if ( $pages == false ) {
-		$pages    = array( 'courses', 'profile', 'become_a_teacher', 'checkout' );
+		$pages    = array( 'courses', 'profile',  'become_a_teacher', 'checkout' );
 		$page_ids = array();
 		foreach ( $pages as $page ) {
 			$id = get_option( 'learn_press_' . $page . '_page_id' );

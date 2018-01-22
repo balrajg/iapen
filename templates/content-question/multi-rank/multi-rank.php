@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for displaying the content of multi-choice question
+ * Template for displaying the content of multi-rank question
  *
  * @author  ThimPress
  * @package LearnPress/Templates

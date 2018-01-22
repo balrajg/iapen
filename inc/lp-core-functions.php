@@ -797,7 +797,6 @@ function learn_press_get_course_duration_support() {
 			'minute' => __( 'Minute(s)' ),
 			'hour'   => __( 'Hour(s)' ),
 			'day'    => __( 'Day(s)' ),
-			'week'   => __( 'Week(s)' )
 		)
 	);
 }
@@ -1752,6 +1751,19 @@ if ( ! function_exists( 'learn_press_is_profile' ) ) {
 		$profile = learn_press_get_page_id( 'profile' );
 
 		return is_page( $profile ) || apply_filters( 'learn_press_is_profile', false ) ? true : false;
+	}
+}
+if ( ! function_exists( 'learn_press_is_attendance' ) ) {
+
+	/**
+	 * Returns true when viewing profile page.
+	 *
+	 * @return bool
+	 */
+	function learn_press_is_attendance() {
+		$attendance = learn_press_get_page_id( 'attendance' );
+
+		return is_page( $attendance ) || apply_filters( 'learn_press_is_attendance', false ) ? true : false;
 	}
 }
 

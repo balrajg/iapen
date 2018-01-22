@@ -1,6 +1,6 @@
 <?php
 /**
- * Class LP_Question_Multi_Choice
+ * Class LP_Question_Multi_Rank
  *
  * @author  ThimPress
  * @package LearnPress/Classes
@@ -32,14 +32,14 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
     public function admin_script() {
         parent::admin_script();
         ?>
-        <script type="text/html" id="tmpl-multi-choice-question-answer">
+        <script type="text/html" id="tmpl-multi-rank-question-answer">
             <tr class="lpr-disabled">
                 <td class="lpr-sortable-handle">
                     <i class="dashicons dashicons-sort"></i>
                 </td>
                 <td class="lpr-is-true-answer">
                     <input type="hidden" name="lpr_question[{{data.question_id}}][answer][is_true][__INDEX__]" value="0" />
-                    <input type="text" name="lpr_question[{{data.question_id}}][answer][is_true][__INDEX__]" value="0" />
+                    <input type="checkbox" name="lpr_question[{{data.question_id}}][answer][is_true][__INDEX__]" value="1" />
                 </td>
                 <td>
                     <input class="lpr-answer-text" type="text" name="lpr_question[{{data.question_id}}][answer][text][__INDEX__]" value="" />
@@ -70,17 +70,17 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
             $answers = array(
                 array(
                     'is_true' => 'yes',
-                    'value' => 'option_first',
+                    'value' => '1',
                     'text' => __('Option First', 'learnpress')
                 ),
                 array(
                     'is_true' => 'no',
-                    'value' => 'option_seconds',
+                    'value' => '2',
                     'text' => __('Option Seconds', 'learnpress')
                 ),
                 array(
                     'is_true' => 'no',
-                    'value' => 'option_third',
+                    'value' => '3',
                     'text' => __('Option Third', 'learnpress')
                 )
             );
@@ -90,7 +90,7 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
 
     public function admin_interface($args = array()) {
         ob_start();
-        $view = learn_press_get_admin_view('meta-boxes/question/multi-choice-options.php');
+        $view = learn_press_get_admin_view('meta-boxes/question/multi-rank-options.php');
         include $view;
         $output = ob_get_clean();
 
@@ -191,7 +191,7 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
                 var $form = $('#post');
 
                 $form.unbind('learn_press_question_before_update.<?php echo $key; ?>').bind('learn_press_question_before_update.<?php echo $key; ?>', function () {
-                    var $question = $('.lpr-question-multi-choice[data-id="<?php echo $this->get('ID'); ?>"]');
+                    var $question = $('.lpr-question-multi-rank[data-id="<?php echo $this->get('ID'); ?>"]');
 
                     if ($question.length) {
                         var $input = $('.lpr-is-true-answer input[type="checkbox"]:checked', $question);
@@ -246,7 +246,7 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
             }
             $post_data['answer'] = $post_answers;
             $post_data['type'] = $this->get_type();
-            //$post_data['explanation']  = $post_explain;
+           
             update_post_meta($post_id, '_lpr_question', $post_data);
         }
         return intval($post_id);
@@ -265,7 +265,7 @@ class LP_Question_Multi_Rank extends LP_Abstract_Question {
         if (null === $answered) {
             $answered = $this->get_user_answered($args);
         }
-        $view = learn_press_locate_template('content-question/multi-choice/answer-options.php');
+        $view = learn_press_locate_template('content-question/multi-rank/answer-options.php');
         include $view;
     }
 

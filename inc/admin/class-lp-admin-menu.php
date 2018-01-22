@@ -136,7 +136,23 @@ class LP_Admin_Menu {
 				'manage_options',
 				'learn-press-uploads',
 				'learn_press_uploads_page'
-			)
+			),
+                    'reports' => array(
+				'learn_press',
+				__( 'Reports', 'learnpress' ),
+				__( 'Reports', 'learnpress' ),
+				'manage_options',
+				'learn-press-reports',
+				'learn_press_reports_page'
+			),
+                    'sample' => array(
+				'learn_press',
+				__( 'Sample', 'learnpress' ),
+				__( 'Sample', 'learnpress' ),
+				'manage_options',
+				'learn-press-sample',
+				'learn_press_sample_page'
+			),
 		);
 
 		// Third-party can be add more items

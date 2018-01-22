@@ -221,6 +221,7 @@ class LP_Assets {
 		$scripts->add( 'learn-press-checkout', $default_path . 'js/frontend/checkout' . $suffix . '.js', $deps, $ver, 1 );
 		$scripts->add( 'learn-press-become-teacher', $default_path . 'js/frontend/become-teacher' . $suffix . '.js', $deps, $ver, 1 );
 		$scripts->add( 'learn-press-profile', $default_path . 'js/frontend/profile' . $suffix . '.js', array( 'jquery', 'backbone', 'utils', 'plupload', 'jquery-ui-slider', 'jquery-ui-draggable' ), $ver, 1 );
+                $scripts->add( 'learn-press-attendance', $default_path . 'js/frontend/attendance' . $suffix . '.js', array( 'jquery' ), $ver, 1 );
 
 		// admin
 		$scripts->add( 'learn-press-admin', $default_path . 'js/admin/admin' . $suffix . '.js', $deps, $ver, 1 );
@@ -807,6 +808,9 @@ class LP_Assets {
 
 			self::enqueue_script( 'learn-press-profile' );
 		}
+                if(learn_press_is_attendance()){
+                    self::enqueue_script( 'learn-press-attendance' );
+                }
 		do_action( 'learn_press_load_scripts' );
 	}
 

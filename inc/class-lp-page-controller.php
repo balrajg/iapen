@@ -132,6 +132,9 @@ class LP_Page_Controller {
 				}
 			}
 		}
+                
+              
+                
 		$queried_object_id = ! empty( $wp_query->queried_object_id ) ? $wp_query->queried_object_id : 0;
 		if ( ( $page_id = learn_press_get_page_id( 'taken_course_confirm' ) ) && is_page( $page_id ) && $page_id == $queried_object_id ) {
 			if ( ! learn_press_user_can_view_order( ! empty( $_REQUEST['order_id'] ) ? $_REQUEST['order_id'] : 0 ) ) {
@@ -154,6 +157,7 @@ class LP_Page_Controller {
 				}
 			}
 		}
+                 
 		if ( $file ) {
 			$template = locate_template( array_unique( $find ) );
 			if ( ! $template && ! in_array( $file, array( 'single-course.php', 'archive-course.php' ) ) ) {

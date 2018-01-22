@@ -55,6 +55,12 @@ class LP_Settings_Pages extends LP_Settings_Base {
 					'default' => '',
 					'type'    => 'pages-dropdown'
 				),
+                            array(
+					'title'   => __( 'Attendance', 'learnpress' ),
+					'id'      => $this->get_field_name( 'attendance_page_id' ),
+					'default' => '',
+					'type'    => 'pages-dropdown'
+				),
 
 				array(
 					'title'   => __( 'Add link to admin bar', 'learnpress' ),

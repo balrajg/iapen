@@ -338,7 +338,8 @@ function _learn_press_add_question_type_support() {
 		array(
 			'multi_choice',
 			'single_choice',
-			'true_or_false'
+			'true_or_false',
+                        'multi_rank'
 		),
 		'check-answer'
 	);

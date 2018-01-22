@@ -159,7 +159,7 @@ class LP_Abstract_Question {
 		/**
 		 * Allows add more type of question to save with the rules below
 		 */
-		$types = apply_filters( 'learn_press_save_default_question_types', array( 'true_or_false', 'multi_choice', 'single_choice' ) );
+		$types = apply_filters( 'learn_press_save_default_question_types', array( 'true_or_false', 'multi_choice', 'multi_rank', 'single_choice' ) );
 		//echo $this->type;
 		///print_r($post_data);die();
 		if ( in_array( $this->type, $types ) ) {
