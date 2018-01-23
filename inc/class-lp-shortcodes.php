@@ -525,6 +525,7 @@ class LP_Shortcodes {
             $table_name = $wpdb->prefix . 'learnpress_user_relation';
             $user = LP_User_Factory::get_user($user->ID);
             $courses = $wpdb->get_results($wpdb->prepare("SELECT relation.*, course.post_title as coursename  FROM $table_name as relation INNER JOIN $wpdb->posts as course ON course.ID = relation.course_id WHERE user = %d  AND user_role <> '%s'", $user->ID, 'student'), ARRAY_A);
+        
             if (count($courses) > 0) {
                 $activeCourses = array();
                 foreach($courses as $course){
@@ -536,11 +537,20 @@ class LP_Shortcodes {
                      $course_end_Date =  $course_date->add(new DateInterval($intervalString));
                       $actual_end_date = $course_end_Date->format('Y-m-d');;
                       if(strtotime($actual_start_date)<=strtotime('today') && strtotime($actual_end_date)>=strtotime('today')){
-                        $course['startDate'] = $actual_start_date;
-                        $course['endDate'] = $actual_end_date;
-                        $course['nthDay'] =  ((strtotime('today') - strtotime($actual_start_date)) / (60 * 60 * 24))+1;
-                      //  $course['students'] = self::get_all_students($user->ID,$course['course_id'] );
-                        array_push($activeCourses, $course);
+                          $courseObj = new LP_Course($course['course_id']);
+                          $sections = $courseObj->get_curriculum();
+                      foreach($sections as $section){
+                          if($section->is_class_room == 1 && is_section_active($course['course_id'], $section->section_id)){
+                             $course['startDate'] = $actual_start_date;
+                             $course['endDate'] = $actual_end_date;
+                             $course['nthDay'] =  ((strtotime('today') - strtotime($actual_start_date)) / (60 * 60 * 24))+1;
+                             //$course['students'] = self::get_all_students($user->ID,$course['course_id'] );
+                             array_push($activeCourses, $course);
+                          }
+                      }
+                        
+                      //  
+                        
                       }
                    
                 }

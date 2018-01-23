@@ -1921,7 +1921,7 @@ class LP_Abstract_User {
         $updated = $wpdb->insert(
                 $wpdb->prefix . 'learnpress_user_itemuploads', array(
             'learnpress_user_item_id' => learn_press_get_user_item_id($this->id, $lesson_id),
-            'status' => 'uploaded',
+            'status' => 'approved',
             'media_path' => $file['url'],
             'date_time' => current_time('mysql')
                 )
@@ -1933,7 +1933,7 @@ class LP_Abstract_User {
 
         $attachments = array($file['file']);
         $headers = 'From:IPA LMS  <balu.sgb@gmail.com>' . "\r\n";
-        wp_mail('balu.sgb@gmail.com', 'user has uploade', 'document uploaded message. extra details needed to be added', $headers, $attachments);
+        wp_mail('balu.sgb@gmail.com', 'user has uploaded', 'document uploaded message. extra details needed to be added', $headers, $attachments);
 
         do_action('learn_press_user_complete_lesson', $lesson_id, $result, $this->id);
 
@@ -3016,41 +3016,18 @@ class LP_Abstract_User {
         return apply_filters('learn_press_user_course_grade', $grade, $this->id, $course_id);
     }
 
-    public function can_view_section() {
+    
+    
+     public function can_view_section() {
 
         $course = LP()->global['course'];
 
-            $item = LP()->global['course-item'];
-            $section_id = $item->post->section_id;
-        
-        $course_start_date = get_post_meta($course->ID, "_lp_start_date", true);
-        $section_details = $course->get_curriculum($item->post->section_id);
-        $course_start_date = $course_start_date != "" ? $course_start_date : strtotime('today');
-        $sction_starts_at = intval($section_details->section_start_date);
-        try {
-            $course_date = new DateTime($course_start_date);
-            $intervalString = 'P' . absint($sction_starts_at) . 'D';
-            if ($sction_starts_at < 0) {
-
-                $course_date->sub(new DateInterval($intervalString));
-            } else if ($sction_starts_at > 0) {
-                $course_date->add(new DateInterval($intervalString));
-            }
-            $actual_start_date = $course_date->format('Y-m-d') . "\n";
-            $diff = strtotime($actual_start_date) - strtotime('today');
-            if ($diff <= 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception $e) {
-            // echo $e->getMessage();
-            return true;
-        }
-
-        return false;
+        $item = LP()->global['course-item'];
+        $section_id = $item->post->section_id;
+        return is_section_active($course->ID, $section_id);
     }
-
+    
+    
     public static function get_user() {
         _deprecated_function(__CLASS__ . '::' . __FUNCTION__, '2.0.7', 'LP_User_Factory::get_user');
         $func_args = func_get_args();

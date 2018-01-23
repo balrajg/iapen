@@ -222,6 +222,8 @@ function _learn_press_get_courses_curriculum( $course_ids, $force = false, $pars
 							'section_order',
 							'section_description',
                                                         'section_start_date',
+                                                        'section_end_date',
+                                                        'is_class_room'
 						) as $prop
 					) {
 						$section->{$prop} = $row->{$prop};

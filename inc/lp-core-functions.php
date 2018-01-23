@@ -2787,3 +2787,30 @@ function learn_press_deprecated_function( $function, $version, $replacement = nu
 		_deprecated_function( $function, $version, $replacement );
 	}
 }
+
+     function is_section_active($course_id, $section_id) {
+
+        $course = new LP_Course($course_id);
+        $section_details = $course->get_curriculum($section_id);
+        $course_start_date = get_post_meta($course->ID, "_lp_start_date", true);
+        $course_duration = get_post_meta($course->ID, "_lp_duration", true);
+      
+        
+        try {
+            $course_end_date = new DateTime($course_start_date);
+            $actual_start_date = $course_end_date->format('Y-m-d');
+            $intervalString = 'P' . absint($course_duration) . 'D';
+            $course_end_date->add(new DateInterval($intervalString));
+            $actual_end_date = $course_end_date->format('Y-m-d') . "\n";
+            $sction_starts_at = $section_details->section_start_date=="0000-00-00"?$actual_start_date: $section_details->section_start_date;
+            $section_ends_at = $section_details->section_end_date=="0000-00-00"?$actual_end_date: $section_details->section_end_date;
+            if (strtotime($sction_starts_at) <= strtotime('today') && strtotime($section_ends_at) >= strtotime('today')) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            // echo $e->getMessage();
+            return false;
+        }
+    }

@@ -20,7 +20,10 @@ if ( !$section->section_id ) {
 if ( $is_hidden ) {
 	$class[] = 'is_hidden';
 }
+$section->section_start_date=$section->section_start_date=="0000-00-00"?" ": $section->section_start_date;
+$section->section_end_date=$section->section_end_date=="0000-00-00"?" ": $section->section_end_date;
 ?>
+
 <li class="<?php echo join( ' ', $class ); ?>" data-id="<?php echo $section ? $section->section_id : ''; ?>">
 	<h3 class="curriculum-section-head">
 		<input name="_lp_curriculum[__SECTION__][name]" type="text" data-field="section-name" placeholder="<?php _e( 'Enter section name and hit enter', 'learnpress' ); ?>" class="lp-section-name no-submit" value="<?php echo esc_attr( $section->section_name ); ?>" />
@@ -63,7 +66,9 @@ if ( $is_hidden ) {
 			</div>
 		<?php endif; ?>
                         <br/>
-                       Topic Start date : <input type="text" name="_lp_curriculum[__SECTION__][section_start_date]"  value="<?php echo esc_attr( $section->section_start_date ); ?>"/> Days
+                       Topic Start date : <input type="text" name="_lp_curriculum[__SECTION__][section_start_date]" data-options='{"separator":" ","dateFormat":"yy-mm-dd","showButtonPanel":true}' class="rwmb-date hasDatepicker"  value="<?php echo esc_attr( $section->section_start_date ); ?>"/> 
+                       Topic End date : <input type="text" name="_lp_curriculum[__SECTION__][section_end_date]" data-options='{"separator":" ","dateFormat":"yy-mm-dd","showButtonPanel":true}' class="rwmb-date hasDatepicker"  value="<?php echo esc_attr( $section->section_end_date ); ?>"/> 
+                       Is class room session : <input type="checkbox" name="_lp_curriculum[__SECTION__][is_class_room]"  value="1" <?php echo  $section->is_class_room == 1?"checked":""; ?>/> 
 		<?php do_action( 'learn_press_after_section_content', $section ); ?>
 	</div>
 </li>

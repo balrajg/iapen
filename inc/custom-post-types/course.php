@@ -877,13 +877,15 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 					'section_course_id'   => 0,
 					'section_order'       => 0,
 					'section_description' => '',
-                                    'section_start_date' => ''
+                                        'section_start_date'  => '',
+                                        'section_end_date'    => '',
+                                        'is_class_room'       =>0,
 				)
 			);
 			$section = stripslashes_deep( $section );
 			extract( $section );
 
-			$insert_data = compact( 'section_name', 'section_course_id', 'section_order', 'section_description','section_start_date' );
+			$insert_data = compact( 'section_name', 'section_course_id', 'section_order', 'section_description','section_start_date','section_end_date','is_class_room'  );
 			$wpdb->insert(
 				$wpdb->learnpress_sections,
 				$insert_data,
@@ -1036,7 +1038,9 @@ if ( !class_exists( 'LP_Course_Post_Type' ) ) {
 							'section_course_id'   => $post->ID,
 							'section_order'       => ++ $section_order,
 							'section_description' => $_section['description'],
-							'section_start_date' => $_section['section_start_date'],
+							'section_start_date'  => $_section['section_start_date'],
+                                                        'section_end_date'    => $_section['section_end_date'],
+                                                        'is_class_room'       => !empty( $_section['is_class_room'] ) ? $_section['is_class_room'] : 0,
 							'items'               => array()
 						);
 
