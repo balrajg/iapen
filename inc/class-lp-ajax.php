@@ -518,8 +518,9 @@ if (!class_exists('LP_AJAX')) {
         public static function get_all_students_for_course($user_id, $course_id, $user_array = array()) {
             global $wpdb;
             $table_name = $wpdb->prefix . 'learnpress_user_relation';
-
-            $children = $wpdb->get_results("SELECT * FROM $table_name WHERE parent = $user_id AND course_id= $course_id");
+            $user_table_name = $wpdb->prefix . 'users';
+            $children = $wpdb->get_results("SELECT ur.user, ur.course_id, us.user_nicename, ur.user_role  FROM $table_name as ur INNER JOIN $user_table_name as us on ur.user=us.ID WHERE ur.parent = $user_id AND ur.course_id= $course_id");
+           // echo "SELECT ur.user, ur.course_id, us.user_nicename FROM $table_name as ur INNER JOIN $user_table_name as us on ur.user=us.ID WHERE ur.parent = $user_id AND ur.course_id= $course_id";
             foreach ($children as $child) {
 
                 if ($child->user_role == "student") {

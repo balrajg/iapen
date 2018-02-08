@@ -5,21 +5,25 @@
         $('#select_course').change(function () {
           var courseId= $(this).val();
           if(courseId != ""){
-              alert($('input[name="_wp_http_referer"]').val());
               $.ajax({
                 url: '?lp-ajax=get-all-students-for-course',
                 data: $(".attendanceForm").serialize(),
                 error: function () {
-                    //$button.removeClass('loading');
+                   
                 },
                 dataType: 'json',
                 success: function (response) {
-                   console.log(response);
+                   if(response.length){
+                       $.each(response, function(k,v){
+                           var html = "<tr><td>"+v.user_nicename+" </td><td><input type='checkbox' value='"+v.user +"' name='attendance_"+v.course_id +"' /> </td> </tr>"
+                           $(".attendance_table table").append(html);
+                       })
+                   }
                   
                 }
             });
           }else{
-              
+              alert("Please select valid option")
           }
           
             

@@ -13,13 +13,11 @@ if (!defined('ABSPATH')) {
 learn_press_print_notices();
 
 do_action('learn_press_before_mark_attendance');
-echo "<pre>";
-print_r($courses);
-echo "</pre>";
+
 ?>
-<h3>Select a course to mark attendance for</h3>
+<h3>Select a course to mark attendance for <?php echo date('d-m-Y', time());?></h3>
 <form name="attendanceForm" class="attendanceForm" action="#">
-    <input type="hidden" name="current_user" value="<?php get_current_user_id() ?>" />
+    <input type="hidden" name="current_user" value="<?php echo get_current_user_id() ?>" />
     <select name="select_course" id="select_course">
         <option value="">Select Course</option>
         <?php
@@ -33,7 +31,9 @@ echo "</pre>";
     </select>
     
     <div class="attendance_table">
-        
+        <table width="100%">
+            
+        </table>
         
     </div>
 

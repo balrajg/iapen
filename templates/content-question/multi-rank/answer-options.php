@@ -58,7 +58,14 @@ if ( $show_result && $completed ) {
 				<?php do_action( 'learn_press_before_question_answer_text', $answer, $this ); ?>
 
 				<label>
-                                    <input type="text" style="float: left; width: 40px;" maxlength="1" name="learn-press-question-<?php echo $this->id; ?>[]" <?php checked( $this->is_selected_option( $answer, $answered ) ); ?> value="0" <?php echo $disabled; ?> />
+                                    <select name="learn-press-question-<?php echo $this->id; ?>[]" <?php checked( $this->is_selected_option( $answer, $answered ) ); ?>>
+                                        <option></option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                        <option value="A">A</option>
+                                        <option value="L">L</option>
+                                    </select>
+                                    
 					<p class="auto-check-lines option-title"><?php echo apply_filters( 'learn_press_question_answer_text', $answer['text'], $answer, $this ); ?></p>
 				</label>
 
